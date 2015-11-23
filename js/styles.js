@@ -1,23 +1,43 @@
 var { StyleSheet, PixelRatio } = require('react-native')
 
 module.exports = StyleSheet.create({
-  scrollView: {
-    backgroundColor: '#B99BC4',
-  },
-  container: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: '#F5FCFF',
-  },
-  welcome: {
-    fontSize: 20,
-    textAlign: 'center',
-    margin: 10,
-  },
-  instructions: {
-    textAlign: 'center',
-    color: '#333333',
-    marginBottom: 5,
-  },
+    navigator: {
+        flex: 1,
+        backgroundColor: '#F5FCFF',
+    },
+    container: {
+        flex: 1,
+        backgroundColor: '#F5FCFF',
+    },
+    toolbar: {
+        backgroundColor: '#a9a9a9',
+        height: 56,
+    },
+    row: {
+        flexDirection: 'row',
+        justifyContent: 'center',
+        padding: 10,
+        backgroundColor: '#F6F6F6',
+    },
+    separator: {
+        height: 1,
+        backgroundColor: '#CCCCCC',
+    },
+    button: {
+        flexDirection: 'column',
+        height: 40,
+        alignItems: 'center',
+        justifyContent: 'center',
+    },
+    buttonText: {
+        textAlign: 'center',
+    },
+    field: {
+        height: 40,
+        borderColor: 'gray',
+        borderWidth: 1
+    },
+    text: {
+        flex: 1,
+    },
 });
