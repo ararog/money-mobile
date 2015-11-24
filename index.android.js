@@ -21,6 +21,7 @@ var store = require('react-native-simple-store')
 var LoginScreen = require('./js/screens/LoginScreen')
 var OverviewScreen = require('./js/screens/OverviewScreen')
 var ExpensesScreen = require('./js/screens/ExpensesScreen')
+var ExpenseDetailsScreen = require('./js/screens/ExpenseDetailsScreen')
 var MenuScreen = require('./js/screens/MenuScreen')
 
 var { container } = require('./js/container')
@@ -67,6 +68,24 @@ var RouteMapper = function(route, navigationOperations, onComponentRef) {
                 <ExpensesScreen
                     style={{flex: 1}}
                     container={container}
+                    navigator={navigationOperations} />
+            </View>
+        );
+    }
+    else if (route.name === 'expense_details') {
+        return (
+            <View style={{flex: 1}}>
+                <ToolbarAndroid
+                    actions={[]}
+                    navIcon={require('./img/menu_button.png')}
+                    onIconClicked={route.openMenu}
+                    style={styles.toolbar}
+                    titleColor='white'
+                    title='Expense Details' />
+                <ExpenseDetailsScreen
+                    style={{flex: 1}}
+                    container={container}
+                    expense={route.expense}
                     navigator={navigationOperations} />
             </View>
         );

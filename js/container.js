@@ -7,7 +7,7 @@ import { CategoriesService } from './services/CategoriesService';
 export let container = new Jimple()
 
 container.set('API_URL', function (c) {
-    return 'http://192.168.1.131:8080/api'
+    return 'http://powerbook.araujo.net.br:8080/api'
 });
 
 container.set('API_VERSION', function (c) {
