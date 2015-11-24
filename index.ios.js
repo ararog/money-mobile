@@ -44,11 +44,21 @@ var Money = React.createClass({
     },
 
     navigate: function(route) {
-        if(route == "overview")
-            this.refs.navigator.replacePrevious({title: "Overview", component: OverviewScreen})
+        if(route == 'overview')
+            this.refs.navigator.push({
+                title: 'Overview',
+                component: OverviewScreen,
+                leftButtonIcon:require('./img/menu_button.png'),
+                onLeftButtonPress: this.openMenu
+            })
 
-        if(route == "expenses")
-            this.refs.navigator.replacePrevious({title: "Expenses", component: ExpensesScreen})
+        if(route == 'expenses')
+            this.refs.navigator.push({
+                title: 'Expenses',
+                component: ExpensesScreen,
+                leftButtonIcon:require('./img/menu_button.png'),
+                onLeftButtonPress: this.openMenu
+            })
 
         this.refs.drawer.close()
     },
@@ -60,7 +70,13 @@ var Money = React.createClass({
                             onLogged={this.onLogged} />
 
         if(this.state.logged) {
-            var initialRoute = {title: 'Overview', component: OverviewScreen, passProps: {openMenu: this.openMenu}}
+            var initialRoute = {
+                title: 'Overview',
+                component: OverviewScreen,
+                leftButtonIcon:require('./img/menu_button.png'),
+                onLeftButtonPress: this.openMenu
+            }
+
             component = <Drawer ref='drawer'
                             openDrawerOffset='.25'
                             content={menu}>
