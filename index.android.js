@@ -25,18 +25,17 @@ var MenuScreen = require('./js/screens/MenuScreen')
 var styles = require('./js/styles')
 
 var _navigator;
+BackAndroid.addEventListener('hardwareBackPress', () => {
+  if (_navigator && _navigator.getCurrentRoutes().length > 1) {
+    _navigator.pop();
+    return true;
+  }
+  return false;
+});
 
 var RouteMapper = function(route, navigationOperations, onComponentRef) {
     _navigator = navigationOperations
-    if (route.name === 'login') {
-        return (
-            <LoginScreen
-                style={{flex: 1}}
-                openMenu={route.openMenu}
-                navigator={navigationOperations} />
-        )
-    }
-    else if (route.name === 'overview') {
+    if (route.name === 'overview') {
         return (
             <View style={{flex: 1}}>
                 <ToolbarAndroid
@@ -71,6 +70,16 @@ var RouteMapper = function(route, navigationOperations, onComponentRef) {
 };
 
 var Money = React.createClass({
+    getInitialState: function() {
+
+        return { logged: false }
+    },
+
+    onLogged: function() {
+
+        this.setState({ logged: true })
+    },
+
     closeMenu: function(){
         this.refs.drawer.close()
     },
@@ -87,23 +96,24 @@ var Money = React.createClass({
     render: function() {
 
         var menu = <MenuScreen onItemClick={this.navigate} />
-        var initialRoute = {name: 'login', openMenu: this.openMenu};
+        var component = <LoginScreen
+                            onLogged={this.onLogged} />
 
-        store.get('token').then((coffee) => {
-                initialRoute = {name: 'overview', openMenu: this.openMenu}
+        store.get('token').then((token) => {
+                var initialRoute = {name: 'overview', openMenu: this.openMenu}
+                component = <Drawer ref='drawer'
+                                openDrawerOffset='.25'
+                                content={menu}>
+                                <Navigator
+                                    style={styles.navigator}
+                                    initialRoute={initialRoute}
+                                    configureScene={() => Navigator.SceneConfigs.FadeAndroid}
+                                    renderScene={RouteMapper} />
+                            </Drawer>
+
             });
 
-        return (
-            <Drawer ref='drawer'
-                openDrawerOffset='.25'
-                content={menu}>
-                <Navigator
-                    style={styles.navigator}
-                    initialRoute={initialRoute}
-                    configureScene={() => Navigator.SceneConfigs.FadeAndroid}
-                    renderScene={RouteMapper} />
-            </Drawer>
-        )
+        return component
     }
 });
 

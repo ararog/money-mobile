@@ -8,13 +8,17 @@ var {
     View,
 } = React;
 
+var store = require('react-native-simple-store')
+
 var styles = require('../styles')
 
 module.exports = React.createClass({
 
     _onPressButton: function(e) {
 
-        this.props.navigator.push({name: 'overview', openMenu: this.props.openMenu})
+        store.save('token', 'blah').then(() => {
+                this.props.onLogged()
+            });
     },
 
     render: function() {
