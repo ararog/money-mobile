@@ -7,7 +7,7 @@ import { CategoriesService } from './services/CategoriesService';
 export let container = new Jimple()
 
 container.set('API_URL', function (c) {
-    return 'http://localhost:8080/api'
+    return 'http://192.168.1.131:8080/api'
 });
 
 container.set('API_VERSION', function (c) {
@@ -20,4 +20,8 @@ container.set('USERS_SERVICE', function (c) {
 
 container.set('EXPENSES_SERVICE', function (c) {
     return new ExpensesService(c.get('API_URL'), c.get('API_VERSION'))
+});
+
+container.set('CATEGORIES_SERVICE', function (c) {
+    return new CategoriesService(c.get('API_URL'), c.get('API_VERSION'))
 });

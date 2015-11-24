@@ -14,21 +14,27 @@ var styles = require('../styles')
 
 module.exports = React.createClass({
 
+    getInitialState: function() {
+        return {
+            email: '',
+            password: ''
+        }
+    },
+
     _onPressButton: function(e) {
 
-        const email = this.refs.email.value
-        const password = this.refs.password.value
-
-        this.props.container.get('USERS_SERVICE').login(email, password)
-        .then(response => {
-            store.save('token', response.body.auth_token)
+        this.props.container.get('USERS_SERVICE').login(this.state.email, this.state.password)
+        .then((response) => response.json())
+        .then((responseData) => {
+            store.save('token', responseData.auth_token)
             .then(() => {
                 this.props.onLogged()
             });
         })
-        .catch(function (response) {
-          console.log(response);
-        });
+        .catch((error) => {
+            console.log(error);
+        })
+        .done()
     },
 
     render: function() {
@@ -38,12 +44,14 @@ module.exports = React.createClass({
                     placeholder='Email'
                     keyboardType='email-address'
                     style={styles.field}
-                    ref='email' />
+                    onChangeText={(text) => this.setState({email: text})}
+                    value={this.state.email} />
                 <TextInput
                     placeholder='Password'
                     secureTextEntry={true}
                     style={styles.field}
-                    ref='password' />
+                    onChangeText={(text) => this.setState({password: text})}
+                    value={this.state.password} />
 
                 <TouchableHighlight
                     onPress={this._onPressButton}>

@@ -26,20 +26,14 @@ var styles = require('./js/styles')
 
 var Money = React.createClass({
 
-    containerDidMount: function() {
-        this.props.container.get('USERS_SERVICE').updateToken()
-        this.props.container.get('EXPENSES_SERVICE').updateToken()
-        this.props.container.get('CATEGORIES_SERVICE').updateToken()
-    },
-
     getInitialState: function() {
         return { logged: false }
     },
 
     onLogged: function() {
-        this.props.container.get('USERS_SERVICE').updateToken()
-        this.props.container.get('EXPENSES_SERVICE').updateToken()
-        this.props.container.get('CATEGORIES_SERVICE').updateToken()
+        container.get('USERS_SERVICE').updateToken()
+        container.get('EXPENSES_SERVICE').updateToken()
+        container.get('CATEGORIES_SERVICE').updateToken()
         this.setState({ logged: true })
     },
 

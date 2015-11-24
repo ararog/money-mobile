@@ -1,17 +1,27 @@
+import store from 'react-native-simple-store'
+
 export class RestService {
     constructor(base, version) {
-
-        var headers = { 'Content-Type': 'application/json', 'Accept-Version': version}
-        if(localStorage.getItem('token'))
-        headers['Authorization'] = 'Bearer ' + localStorage.getItem('token')
+        this.headers = {'Content-Type': 'application/json', 'Accept-Version': version}
+        store.get('token').then((token) => {
+            if(token)
+                this.headers['Authorization'] = 'Bearer ' + token
+        });
 
         this.base = base
+    }
+
+    updateToken() {
+        store.get('token').then((token) => {
+            if(token)
+                this.headers['Authorization'] = 'Bearer ' + token
+        });
     }
 
     post(path, data) {
         return fetch(this.base + path, {
             method: 'POST',
-            headers: headers,
+            headers: this.headers,
             body: JSON.stringify(data)
         })
     }
@@ -19,21 +29,22 @@ export class RestService {
     get(path, data) {
         return fetch(this.base + path, {
             method: 'GET',
-            headers: headers
+            headers: this.headers,
+            body: JSON.stringify(data)
         })
     }
 
     delete(path, data) {
         return fetch(this.base + path, {
             method: 'DELETE',
-            headers: headers
+            headers: this.headers
         })
     }
 
     put(path, data) {
         return fetch(this.base + path, {
             method: 'PUT',
-            headers: headers,
+            headers: this.headers,
             body: JSON.stringify(data)
         })
     }
