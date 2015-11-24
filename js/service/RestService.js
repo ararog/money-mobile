@@ -1,12 +1,15 @@
+var store = require('react-native-simple-store')
+
 export class RestService {
     constructor(base, version) {
-
-        var headers = { 'Content-Type': 'application/json', 'Accept-Version': version}
-        if(localStorage.getItem('token'))
-            headers['Authorization'] = 'Bearer ' + localStorage.getItem('token')
-
-        this.headers = headers
+        this.headers = { 'Content-Type': 'application/json', 'Accept-Version': version}
         this.base = base
+    }
+
+    updateToken() {
+        store.get('token').then((token) => {
+            this.headers['Authorization'] = 'Bearer ' + token
+        });
     }
 
     post(path, data) {

@@ -22,6 +22,8 @@ var LoginScreen = require('./js/screens/LoginScreen')
 var OverviewScreen = require('./js/screens/OverviewScreen')
 var ExpensesScreen = require('./js/screens/ExpensesScreen')
 var MenuScreen = require('./js/screens/MenuScreen')
+
+var { container } = require('./js/container')
 var styles = require('./js/styles')
 
 var _navigator;
@@ -47,6 +49,7 @@ var RouteMapper = function(route, navigationOperations, onComponentRef) {
                     title="Overview" />
                 <OverviewScreen
                     style={{flex: 1}}
+                    container={container}
                     navigator={navigationOperations} />
             </View>
         );
@@ -63,6 +66,7 @@ var RouteMapper = function(route, navigationOperations, onComponentRef) {
                     title='Expenses' />
                 <ExpensesScreen
                     style={{flex: 1}}
+                    container={container}
                     navigator={navigationOperations} />
             </View>
         );
@@ -70,13 +74,21 @@ var RouteMapper = function(route, navigationOperations, onComponentRef) {
 };
 
 var Money = React.createClass({
-    getInitialState: function() {
 
+    containerDidMount: function() {
+        this.props.container.get('USERS_SERVICE').updateToken()
+        this.props.container.get('EXPENSES_SERVICE').updateToken()
+        this.props.container.get('CATEGORIES_SERVICE').updateToken()
+    },
+
+    getInitialState: function() {
         return { logged: false }
     },
 
     onLogged: function() {
-
+        this.props.container.get('USERS_SERVICE').updateToken()
+        this.props.container.get('EXPENSES_SERVICE').updateToken()
+        this.props.container.get('CATEGORIES_SERVICE').updateToken()
         this.setState({ logged: true })
     },
 
@@ -97,21 +109,21 @@ var Money = React.createClass({
 
         var menu = <MenuScreen onItemClick={this.navigate} />
         var component = <LoginScreen
+                            container={container}
                             onLogged={this.onLogged} />
 
-        store.get('token').then((token) => {
-                var initialRoute = {name: 'overview', openMenu: this.openMenu}
-                component = <Drawer ref='drawer'
-                                openDrawerOffset='.25'
-                                content={menu}>
-                                <Navigator
-                                    style={styles.navigator}
-                                    initialRoute={initialRoute}
-                                    configureScene={() => Navigator.SceneConfigs.FadeAndroid}
-                                    renderScene={RouteMapper} />
-                            </Drawer>
-
-            });
+        if(this.state.logged) {
+            var initialRoute = {name: 'overview', openMenu: this.openMenu}
+            component = <Drawer ref='drawer'
+                            openDrawerOffset='.25'
+                            content={menu}>
+                            <Navigator
+                                style={styles.navigator}
+                                initialRoute={initialRoute}
+                                configureScene={() => Navigator.SceneConfigs.FadeAndroid}
+                                renderScene={RouteMapper} />
+                        </Drawer>
+        }
 
         return component
     }

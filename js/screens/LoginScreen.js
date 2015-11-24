@@ -16,9 +16,19 @@ module.exports = React.createClass({
 
     _onPressButton: function(e) {
 
-        store.save('token', 'blah').then(() => {
+        const email = this.refs.email.value
+        const password = this.refs.password.value
+
+        this.props.container.get('USERS_SERVICE').login(email, password)
+        .then(response => {
+            store.save('token', response.body.auth_token)
+            .then(() => {
                 this.props.onLogged()
             });
+        })
+        .catch(function (response) {
+          console.log(response);
+        });
     },
 
     render: function() {
