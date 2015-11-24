@@ -7,6 +7,7 @@
   },
   "dependencies": {
     "jimple": "^1.1.0",
+    "md5": "^2.0.0",
     "react-native": "^0.14.2",
     "react-native-drawer": "^1.8.0",
     "react-native-simple-store": "^0.1.0"
