@@ -28,6 +28,9 @@ module.exports = React.createClass({
         .then((responseData) => {
             store.save('token', responseData.auth_token)
             .then(() => {
+                this.props.container.get('USERS_SERVICE').setToken(responseData.auth_token)
+                this.props.container.get('EXPENSES_SERVICE').setToken(responseData.auth_token)
+                this.props.container.get('CATEGORIES_SERVICE').setToken(responseData.auth_token)
                 this.props.onLogged()
             });
         })

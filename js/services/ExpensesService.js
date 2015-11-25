@@ -7,7 +7,7 @@ export class ExpensesService extends RestService {
     }
 
     loadExpenses(pageNumber) {
-        return super.get('/expenses', { params: {page: pageNumber} } );
+        return super.get('/expenses?page=' + pageNumber );
     }
 
     loadById(id) {

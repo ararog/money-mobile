@@ -9,4 +9,8 @@ export class UsersService extends RestService {
             password: md5(password)
         });
     }
+
+    isLogged() {
+        return this.token !== undefined
+    }
 }

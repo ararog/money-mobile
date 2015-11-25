@@ -48,9 +48,9 @@ module.exports = React.createClass({
         .then((responseData) => {
             this.setState({
                 activePage: page,
-                itemCount: responseData.total / 10,
+                itemCount: responseData.total,
                 isLoading: false,
-                datasource: this._updateDataSource(responseData.items)
+                dataSource: this._updateDataSource(responseData.items)
             })
         })
         .catch((error) => {
@@ -59,7 +59,7 @@ module.exports = React.createClass({
     },
 
     _updateDataSource: function(expenses: Array<any>): ListView.DataSource {
-        return this.state.dataSource.cloneWithRows(expenses);
+        return this.state.dataSource.cloneWithRows(expenses)
     },
 
     _renderRow: function(expense: Object, sectionID: number, rowID: number) {
@@ -68,7 +68,7 @@ module.exports = React.createClass({
                 <View>
                     <View style={styles.row}>
                         <Text style={styles.text}>
-                            {rowData}
+                            {expense.description}
                         </Text>
                     </View>
                     <View style={styles.separator} />
@@ -78,7 +78,6 @@ module.exports = React.createClass({
     },
 
     _pressRow: function(expense: Object) {
-
         if (Platform.OS === 'ios') {
             this.props.navigator.push({
                 title: 'Expense Details',
@@ -95,7 +94,8 @@ module.exports = React.createClass({
     },
 
     render: function() {
-
+        var newDs = this.state.dataSource
+        console.log(newDs.getRowCount())
         return (
             <View style={styles.container}>
                 <ListView

@@ -35,17 +35,21 @@ module.exports = React.createClass({
         var pendingItems
 
         if(this.state.pending) {
+            var index = 0
             pendingItems = this.state.pending.map(pending => {
-                return (<View>
-                            <Text>{pending.total.toFixed(2)}</Text>
-                            <Text>{pending.name}</Text>
+                index++
+                return (<View style={styles.pending_stats_box} key={index}>
+                            <Text style={styles.pending_stats_amount}>{pending.total.toFixed(2)}</Text>
+                            <Text style={styles.pending_stats_category}>{pending.name}</Text>
                         </View>)
             });
         }
 
         return (
             <View style={styles.container}>
-                {pendingItems}
+                <View style={styles.pending_stats_container}>
+                    {pendingItems}
+                </View>
             </View>
         );
     }

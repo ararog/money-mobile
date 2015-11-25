@@ -18,6 +18,7 @@ var {
 var Drawer = require('react-native-drawer')
 var store = require('react-native-simple-store')
 
+var StartupScreen = require('./js/screens/StartupScreen')
 var LoginScreen = require('./js/screens/LoginScreen')
 var OverviewScreen = require('./js/screens/OverviewScreen')
 var ExpensesScreen = require('./js/screens/ExpensesScreen')
@@ -95,13 +96,21 @@ var RouteMapper = function(route, navigationOperations, onComponentRef) {
 var Money = React.createClass({
 
     getInitialState: function() {
-        return { logged: false }
+        return { logged: false, started: false}
+    },
+
+    componentDidMount: function() {
+        store.get('token').then((token) => {
+            if(token) {
+                container.get('USERS_SERVICE').setToken(token)
+                container.get('EXPENSES_SERVICE').setToken(token)
+                container.get('CATEGORIES_SERVICE').setToken(token)
+            }
+            this.setState({started: true})
+        });
     },
 
     onLogged: function() {
-        container.get('USERS_SERVICE').updateToken()
-        container.get('EXPENSES_SERVICE').updateToken()
-        container.get('CATEGORIES_SERVICE').updateToken()
         this.setState({ logged: true })
     },
 
@@ -120,12 +129,15 @@ var Money = React.createClass({
 
     render: function() {
 
+        if(! this.state.started)
+            return <StartupScreen />
+
         var menu = <MenuScreen onItemClick={this.navigate} />
         var component = <LoginScreen
                             container={container}
                             onLogged={this.onLogged} />
 
-        if(this.state.logged) {
+        if(container.get('USERS_SERVICE').isLogged()) {
             var initialRoute = {name: 'overview', openMenu: this.openMenu}
             component = <Drawer ref='drawer'
                             openDrawerOffset='.25'
