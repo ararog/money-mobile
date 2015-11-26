@@ -22,7 +22,7 @@ module.exports = React.createClass({
         }
     },
 
-    _onPressButton: function(e) {
+    _onLoginClicked: function(e) {
 
         this.props.container.get('USERS_SERVICE').login(this.state.email, this.state.password)
         .then((response) => response.json())
@@ -58,7 +58,7 @@ module.exports = React.createClass({
                     value={this.state.password} />
 
                 <TouchableHighlight
-                    onPress={this._onPressButton}>
+                    onPress={this._onLoginClicked}>
                     <View style={styles.button}>
                         <Text style={styles.buttonText}>
                             Login

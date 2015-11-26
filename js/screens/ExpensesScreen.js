@@ -71,7 +71,7 @@ module.exports = React.createClass({
             description = description.substring(0, 50)
 
         return (
-            <TouchableHighlight onPress={() => this._pressRow(expense)}>
+            <TouchableHighlight onPress={() => this._onItemClicked(expense)}>
                 <View>
                     <View style={localStyles.row}>
                         <Text style={localStyles.description_label}>
@@ -92,7 +92,7 @@ module.exports = React.createClass({
         );
     },
 
-    _pressRow: function(expense: Object) {
+    _onItemClicked: function(expense: Object) {
         if (Platform.OS === 'ios') {
             this.props.navigator.push({
                 title: 'Expense Details',

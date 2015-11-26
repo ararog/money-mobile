@@ -40,11 +40,48 @@ module.exports = React.createClass({
         return state
     },
 
+    _onSaveClicked: function(e) {
+
+        var data = {
+            description: this.state.description,
+            amount: this.state.amount,
+            comment: this.state.comment,
+        }
+
+        var c = this.props.container
+
+        var promisse;
+        if(this.props.expense)
+            promisse = c.get('EXPENSES_SERVICE').update(
+                this.props.expense.id, data)
+        else
+            promisse = c.get('EXPENSES_SERVICE').add(data)
+
+        promisse.then((response) => {
+            this.props.navigator.pop()
+        })
+        .catch((error) => {
+            console.log(error)
+        });
+    },
+
+    _onDeleteClicked: function(e) {
+
+        this.props.container.get('EXPENSES_SERVICE')
+        .delete(this.props.expense.id)
+        .then((response) => {
+            this.props.navigator.pop()
+        })
+        .catch((error) => {
+            console.log(error)
+        });
+    },
+
     render: function() {
 
         var save_button = <TouchableHighlight
                             style={styles.button}
-                            onPress={this._onPressButton}>
+                            onPress={this._onSaveClicked}>
                             <Text style={localStyles.buttonText}>
                                 Save
                             </Text>
@@ -54,7 +91,7 @@ module.exports = React.createClass({
         if(this.props.expense) {
             save_button = <TouchableHighlight
                                 style={localStyles.left_button}
-                                onPress={this._onPressButton}>
+                                onPress={this._onDeleteClicked}>
                                 <Text style={localStyles.buttonText}>
                                     Save
                                 </Text>
@@ -62,7 +99,7 @@ module.exports = React.createClass({
 
             delete_button = <TouchableHighlight
                                 style={localStyles.right_button}
-                                onPress={this._onPressButton}>
+                                onPress={this._onDeleteClicked}>
                                 <Text style={localStyles.buttonText}>
                                     Delete
                                 </Text>
