@@ -4,6 +4,7 @@ var React = require('react-native');
 var {
     Text,
     TextInput,
+    StyleSheet,
     TouchableHighlight,
     View,
 } = React;
@@ -42,7 +43,7 @@ module.exports = React.createClass({
 
     render: function() {
         return (
-            <View style={styles.container}>
+            <View style={localStyles.container}>
                 <TextInput
                     placeholder='Email'
                     keyboardType='email-address'
@@ -66,5 +67,13 @@ module.exports = React.createClass({
                 </TouchableHighlight>
             </View>
         );
+    }
+});
+
+var localStyles = StyleSheet.create({
+    container: {
+        flex: 1,
+        padding: 10,
+        justifyContent: 'center'
     }
 });

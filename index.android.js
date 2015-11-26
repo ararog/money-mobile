@@ -78,8 +78,8 @@ var RouteMapper = function(route, navigationOperations, onComponentRef) {
             <View style={{flex: 1}}>
                 <ToolbarAndroid
                     actions={[]}
-                    navIcon={require('./img/menu_button.png')}
-                    onIconClicked={route.openMenu}
+                    navIcon={require('./img/nav_bar_back_arrow.png')}
+                    onIconClicked={navigationOperations.pop}
                     style={styles.toolbar}
                     titleColor='white'
                     title='Expense Details' />

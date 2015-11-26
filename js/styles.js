@@ -44,23 +44,4 @@ module.exports = StyleSheet.create({
     text: {
         flex: 1,
     },
-    pending_stats_container: {
-        margin: 100,
-        alignSelf: 'center',
-        flexDirection: 'row',
-        width: 440,
-    },
-    pending_stats_box: {
-        width: 100,
-        margin: 5
-    },
-    pending_stats_amount: {
-        fontSize: 26,
-        fontWeight: 'bold',
-        textAlign: 'center'
-    },
-    pending_stats_category: {
-        fontSize: 14,
-        textAlign: 'center'
-    }
 });

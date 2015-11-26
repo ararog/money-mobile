@@ -5,6 +5,7 @@ var {
     View,
     ListView,
     Text,
+    StyleSheet,
     TouchableHighlight,
 } = React;
 
@@ -31,7 +32,7 @@ module.exports = React.createClass({
         return (
             <TouchableHighlight onPress={() => this._pressRow(rowID)}>
                 <View>
-                    <View style={styles.row}>
+                    <View style={localStyles.row}>
                         <Text style={styles.text}>
                             {rowData}
                         </Text>
@@ -59,4 +60,14 @@ module.exports = React.createClass({
 
         this.props.onItemClick(route)
     },
+});
+
+var localStyles = StyleSheet.create({
+    row: {
+        flexDirection: 'row',
+        justifyContent: 'center',
+        height: 40,
+        padding: 10,
+        backgroundColor: '#F6F6F6',
+    }
 });
