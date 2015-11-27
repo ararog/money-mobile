@@ -18,10 +18,14 @@ var {
 var Drawer = require('react-native-drawer')
 var store = require('react-native-simple-store')
 
+var StartupScreen = require('./js/screens/StartupScreen')
 var LoginScreen = require('./js/screens/LoginScreen')
 var OverviewScreen = require('./js/screens/OverviewScreen')
 var ExpensesScreen = require('./js/screens/ExpensesScreen')
+var ExpenseDetailsScreen = require('./js/screens/ExpenseDetailsScreen')
 var MenuScreen = require('./js/screens/MenuScreen')
+
+var { container } = require('./js/container')
 var styles = require('./js/styles')
 
 var _navigator;
@@ -47,6 +51,7 @@ var RouteMapper = function(route, navigationOperations, onComponentRef) {
                     title="Overview" />
                 <OverviewScreen
                     style={{flex: 1}}
+                    container={container}
                     navigator={navigationOperations} />
             </View>
         );
@@ -63,6 +68,25 @@ var RouteMapper = function(route, navigationOperations, onComponentRef) {
                     title='Expenses' />
                 <ExpensesScreen
                     style={{flex: 1}}
+                    container={container}
+                    navigator={navigationOperations} />
+            </View>
+        );
+    }
+    else if (route.name === 'expense_details') {
+        return (
+            <View style={{flex: 1}}>
+                <ToolbarAndroid
+                    actions={[]}
+                    navIcon={require('./img/nav_bar_back_arrow.png')}
+                    onIconClicked={navigationOperations.pop}
+                    style={styles.toolbar}
+                    titleColor='white'
+                    title='Expense Details' />
+                <ExpenseDetailsScreen
+                    style={{flex: 1}}
+                    container={container}
+                    expense={route.expense}
                     navigator={navigationOperations} />
             </View>
         );
@@ -70,13 +94,23 @@ var RouteMapper = function(route, navigationOperations, onComponentRef) {
 };
 
 var Money = React.createClass({
-    getInitialState: function() {
 
-        return { logged: false }
+    getInitialState: function() {
+        return { logged: false, started: false}
+    },
+
+    componentDidMount: function() {
+        store.get('token').then((token) => {
+            if(token) {
+                container.get('USERS_SERVICE').setToken(token)
+                container.get('EXPENSES_SERVICE').setToken(token)
+                container.get('CATEGORIES_SERVICE').setToken(token)
+            }
+            this.setState({started: true})
+        });
     },
 
     onLogged: function() {
-
         this.setState({ logged: true })
     },
 
@@ -95,23 +129,26 @@ var Money = React.createClass({
 
     render: function() {
 
+        if(! this.state.started)
+            return <StartupScreen />
+
         var menu = <MenuScreen onItemClick={this.navigate} />
         var component = <LoginScreen
+                            container={container}
                             onLogged={this.onLogged} />
 
-        store.get('token').then((token) => {
-                var initialRoute = {name: 'overview', openMenu: this.openMenu}
-                component = <Drawer ref='drawer'
-                                openDrawerOffset='.25'
-                                content={menu}>
-                                <Navigator
-                                    style={styles.navigator}
-                                    initialRoute={initialRoute}
-                                    configureScene={() => Navigator.SceneConfigs.FadeAndroid}
-                                    renderScene={RouteMapper} />
-                            </Drawer>
-
-            });
+        if(container.get('USERS_SERVICE').isLogged()) {
+            var initialRoute = {name: 'overview', openMenu: this.openMenu}
+            component = <Drawer ref='drawer'
+                            openDrawerOffset='.25'
+                            content={menu}>
+                            <Navigator
+                                style={styles.navigator}
+                                initialRoute={initialRoute}
+                                configureScene={() => Navigator.SceneConfigs.FadeAndroid}
+                                renderScene={RouteMapper} />
+                        </Drawer>
+        }
 
         return component
     }

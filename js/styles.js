@@ -1,6 +1,10 @@
 var { StyleSheet, PixelRatio } = require('react-native')
 
 module.exports = StyleSheet.create({
+    splash: {
+        flex: 1,
+        backgroundColor: 'black',
+    },
     navigator: {
         flex: 1,
         backgroundColor: '#F5FCFF',
@@ -31,6 +35,10 @@ module.exports = StyleSheet.create({
     },
     buttonText: {
         textAlign: 'center',
+    },
+    label: {
+        color: 'gray',
+        fontSize: 12
     },
     field: {
         height: 40,

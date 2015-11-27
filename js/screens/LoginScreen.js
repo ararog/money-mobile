@@ -4,6 +4,7 @@ var React = require('react-native');
 var {
     Text,
     TextInput,
+    StyleSheet,
     TouchableHighlight,
     View,
 } = React;
@@ -14,29 +15,50 @@ var styles = require('../styles')
 
 module.exports = React.createClass({
 
-    _onPressButton: function(e) {
+    getInitialState: function() {
+        return {
+            email: '',
+            password: ''
+        }
+    },
 
-        store.save('token', 'blah').then(() => {
+    _onLoginClicked: function(e) {
+
+        this.props.container.get('USERS_SERVICE').login(this.state.email, this.state.password)
+        .then((response) => response.json())
+        .then((responseData) => {
+            store.save('token', responseData.auth_token)
+            .then(() => {
+                this.props.container.get('USERS_SERVICE').setToken(responseData.auth_token)
+                this.props.container.get('EXPENSES_SERVICE').setToken(responseData.auth_token)
+                this.props.container.get('CATEGORIES_SERVICE').setToken(responseData.auth_token)
                 this.props.onLogged()
             });
+        })
+        .catch((error) => {
+            console.log(error);
+        })
+        .done()
     },
 
     render: function() {
         return (
-            <View style={styles.container}>
+            <View style={localStyles.container}>
                 <TextInput
                     placeholder='Email'
                     keyboardType='email-address'
                     style={styles.field}
-                    ref='email' />
+                    onChangeText={(text) => this.setState({email: text})}
+                    value={this.state.email} />
                 <TextInput
                     placeholder='Password'
                     secureTextEntry={true}
                     style={styles.field}
-                    ref='password' />
+                    onChangeText={(text) => this.setState({password: text})}
+                    value={this.state.password} />
 
                 <TouchableHighlight
-                    onPress={this._onPressButton}>
+                    onPress={this._onLoginClicked}>
                     <View style={styles.button}>
                         <Text style={styles.buttonText}>
                             Login
@@ -45,5 +67,13 @@ module.exports = React.createClass({
                 </TouchableHighlight>
             </View>
         );
+    }
+});
+
+var localStyles = StyleSheet.create({
+    container: {
+        flex: 1,
+        padding: 10,
+        justifyContent: 'center'
     }
 });
