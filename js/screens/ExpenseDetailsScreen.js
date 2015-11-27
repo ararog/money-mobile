@@ -23,6 +23,9 @@ module.exports = React.createClass({
             description: '',
             amount: '',
             comment: '',
+            done: false,
+            category_id: null,
+            categories: [],
         }
 
         if(this.props.expense) {
@@ -106,28 +109,75 @@ module.exports = React.createClass({
                             </TouchableHighlight>
         }
 
+        var categoryDropdown
+        if (Platform.OS === 'ios') {
+            var items = this.state.categories.map((category) => {
+                  return <PickerItemIOS
+                              key={category.id}
+                              value={category.id}
+                              label={category.name} />
+            })
+
+            categoryDropdown = <PickerIOS
+                                  selectedValue={this.state.carMake}
+                                  onValueChange={(category_id) => this.setState({category_id: category_id})}>
+                                  {items}
+                                </PickerIOS>
+        }
+        else {
+            var items = this.state.categories.map(category => {
+                return category.name
+            })
+            .reduce((list, item) => {
+                list.push(item)
+            }, ['Choose a Category'])
+            categoryDropdown = <Dropdown
+                                    style={{ height: 20, width: 200}}
+                                    values={items}
+                                    selected={1}
+                                    onChange={(data) => { this.setState({category_id: this.categories[dala.selected].id})}} />
+        }
+
+        var doneSwitch
+        if (Platform.OS === 'ios') {
+            doneSwitch = <SwitchIOS
+                            onValueChange={(value) => this.setState({done: value})}
+                            value={this.state.done} />
+        }
+        else {
+            doneSwitch = <SwitchAndroid
+                            onValueChange={(value) => this.setState({done: value})}
+                            value={this.state.done} />
+        }
+
         return (
             <View style={localStyles.container}>
+                <Text style={styles.label}>Description</Text>
                 <TextInput
-                    placeholder='Description'
                     keyboardType='default'
                     style={styles.field}
                     onChangeText={(text) => this.setState({description: text})}
                     value={this.state.description} />
 
+                <Text style={styles.label}>Category</Text>
+                {categoryDropdown}
+
+                <Text style={styles.label}>Amount</Text>
                 <TextInput
-                    placeholder='Amount'
                     keyboardType='numeric'
                     style={styles.field}
                     onChangeText={(text) => this.setState({amount: text})}
                     value={this.state.amount} />
 
+                <Text style={styles.label}>Comment</Text>
                 <TextInput
-                    placeholder='Comment'
                     keyboardType='default'
                     style={styles.field}
                     onChangeText={(text) => this.setState({comment: text})}
                     value={this.state.comment} />
+
+                <Text style={styles.label}>Done</Text>
+                {doneSwitch}
 
                 <View style={{flexDirection: 'row', height: 30}}>
                     {save_button}

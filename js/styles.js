@@ -36,6 +36,10 @@ module.exports = StyleSheet.create({
     buttonText: {
         textAlign: 'center',
     },
+    label: {
+        color: 'gray',
+        fontSize: 12
+    },
     field: {
         height: 40,
         borderColor: 'gray',
