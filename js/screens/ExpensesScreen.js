@@ -38,13 +38,14 @@ module.exports = React.createClass({
     },
 
     _onEndReached: function() {
-        if(! this.state.isLoading && this._hasMore()) {
-            this.setState({isLoading: true})
+        if(! this.state.isLoading && this._hasMore())
             this._paginate(this.state.activePage + 1)
-        }
     },
 
     _paginate(page) {
+
+        this.setState({isLoading: true})
+
         this.props.container.get('EXPENSES_SERVICE')
         .loadExpenses(page)
         .then((response) => response.json())

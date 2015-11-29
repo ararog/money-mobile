@@ -2,9 +2,11 @@
 
 var React = require('react-native');
 var {
+    PickerIOS,
+    PickerItemIOS,
+    Platform,
     StyleSheet,
     SwitchIOS,
-    SwitchAndroid,
     Text,
     TextInput,
     TouchableHighlight,
@@ -20,6 +22,7 @@ module.exports = React.createClass({
     getInitialState: function() {
 
         var state = {
+            showPicker: false,
             description: '',
             amount: '',
             comment: '',
@@ -33,22 +36,38 @@ module.exports = React.createClass({
             if(this.props.expense.amount)
                 amount = this.props.expense.amount.toString()
 
-            state = {
-                description: this.props.expense.description,
-                amount: amount,
-                comment: this.props.expense.comment,
-            }
+            state.description = this.props.expense.description
+            state.amount = amount
+            state.comment = this.props.expense.comment
+            state.category_id = this.props.expense.category_id
+            state.done = this.props.expense.done == 0 ? false : true
         }
 
         return state
     },
 
+    componentDidMount: function() {
+        this.props.container.get('CATEGORIES_SERVICE')
+        .loadAll()
+        .then((response) => response.json())
+        .then((responseData) => {
+            this.setState({
+                categories: responseData
+            })
+        })
+        .catch((error) => {
+            console.log(error)
+        });
+    },
+
     _onSaveClicked: function(e) {
 
         var data = {
+            category_id: this.state.category_id,
             description: this.state.description,
             amount: this.state.amount,
             comment: this.state.comment,
+            done: this.state.done
         }
 
         var c = this.props.container
@@ -109,8 +128,7 @@ module.exports = React.createClass({
                             </TouchableHighlight>
         }
 
-        var categoryDropdown
-        if (Platform.OS === 'ios') {
+        if(this.state.showPicker) {
             var items = this.state.categories.map((category) => {
                   return <PickerItemIOS
                               key={category.id}
@@ -118,37 +136,26 @@ module.exports = React.createClass({
                               label={category.name} />
             })
 
-            categoryDropdown = <PickerIOS
-                                  selectedValue={this.state.carMake}
-                                  onValueChange={(category_id) => this.setState({category_id: category_id})}>
-                                  {items}
-                                </PickerIOS>
-        }
-        else {
-            var items = this.state.categories.map(category => {
-                return category.name
-            })
-            .reduce((list, item) => {
-                list.push(item)
-            }, ['Choose a Category'])
-            categoryDropdown = <Dropdown
-                                    style={{ height: 20, width: 200}}
-                                    values={items}
-                                    selected={1}
-                                    onChange={(data) => { this.setState({category_id: this.categories[dala.selected].id})}} />
+            picker = <PickerIOS
+                        selectedValue={this.state.category_id}
+                        onValueChange={(category_id) => {
+                            this.setState({category_id: category_id, showPicker: false})
+                        }}>
+                        {items}
+                     </PickerIOS>
         }
 
-        var doneSwitch
-        if (Platform.OS === 'ios') {
-            doneSwitch = <SwitchIOS
+        var categoryDropdown = <TouchableHighlight
+                                    style={localStyles.right_button}
+                                    onPress={() => this.setState({showPicker: true})}>
+                                    <Text style={localStyles.buttonText}>
+                                        Choose a Category
+                                    </Text>
+                                </TouchableHighlight>
+
+        var doneSwitch = <SwitchIOS
                             onValueChange={(value) => this.setState({done: value})}
                             value={this.state.done} />
-        }
-        else {
-            doneSwitch = <SwitchAndroid
-                            onValueChange={(value) => this.setState({done: value})}
-                            value={this.state.done} />
-        }
 
         return (
             <View style={localStyles.container}>
@@ -177,12 +184,16 @@ module.exports = React.createClass({
                     value={this.state.comment} />
 
                 <Text style={styles.label}>Done</Text>
-                {doneSwitch}
+                <View style={localStyles.switch}>
+                    {doneSwitch}
+                </View>
 
                 <View style={{flexDirection: 'row', height: 30}}>
                     {save_button}
                     {delete_button}
                 </View>
+
+                {picker}
             </View>
         );
     }
@@ -194,6 +205,11 @@ var localStyles = StyleSheet.create({
         padding: 10,
         backgroundColor: '#F5FCFF',
     },
+    switch: {
+        flexDirection: 'row',
+        height: 40,
+        alignItems: 'flex-start',
+    },
     buttonText: {
         fontSize: 12,
         textAlign: 'center',
@@ -202,7 +218,6 @@ var localStyles = StyleSheet.create({
     left_button: {
         flex: 1,
         justifyContent: 'center',
-        flexDirection: 'column',
         marginRight: 5,
         height: 30,
         backgroundColor: 'blue',
@@ -211,7 +226,6 @@ var localStyles = StyleSheet.create({
     right_button: {
         flex: 1,
         justifyContent: 'center',
-        flexDirection: 'column',
         marginLeft: 5,
         height: 30,
         backgroundColor: 'red',

@@ -16,6 +16,7 @@ var {
 var Drawer = require('react-native-drawer')
 var store = require('react-native-simple-store')
 
+var StartupScreen = require('./js/screens/StartupScreen')
 var LoginScreen = require('./js/screens/LoginScreen')
 var OverviewScreen = require('./js/screens/OverviewScreen')
 var ExpensesScreen = require('./js/screens/ExpensesScreen')
@@ -30,7 +31,7 @@ var Money = React.createClass({
         return { logged: false, started: false}
     },
 
-    onLogged: function() {
+    componentDidMount: function() {
         store.get('token').then((token) => {
             if(token) {
                 container.get('USERS_SERVICE').setToken(token)
@@ -39,6 +40,10 @@ var Money = React.createClass({
             }
             this.setState({started: true})
         });
+    },
+
+    onLogged: function() {
+        this.setState({ logged: true })
     },
 
     closeMenu: function(){
@@ -53,7 +58,7 @@ var Money = React.createClass({
         if(route == 'overview')
             this.refs.navigator.push({
                 title: 'Overview',
-                passProps: {container: {container}}
+                passProps: {container: container},
                 component: OverviewScreen,
                 leftButtonIcon:require('./img/menu_button.png'),
                 onLeftButtonPress: this.openMenu
@@ -62,7 +67,7 @@ var Money = React.createClass({
         if(route == 'expenses')
             this.refs.navigator.push({
                 title: 'Expenses',
-                passProps: {container: {container}}
+                passProps: {container: container},
                 component: ExpensesScreen,
                 leftButtonIcon:require('./img/menu_button.png'),
                 onLeftButtonPress: this.openMenu
@@ -84,7 +89,7 @@ var Money = React.createClass({
         if(container.get('USERS_SERVICE').isLogged()) {
             var initialRoute = {
                 title: 'Overview',
-                passProps: {container: {container}}
+                passProps: {container: container},
                 component: OverviewScreen,
                 leftButtonIcon:require('./img/menu_button.png'),
                 onLeftButtonPress: this.openMenu
