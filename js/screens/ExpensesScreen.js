@@ -98,7 +98,7 @@ module.exports = React.createClass({
             this.props.navigator.push({
                 title: 'Expense Details',
                 component: ExpenseDetailsScreen,
-                passProps: {expense: expense},
+                passProps: {expense: expense, container: this.props.container},
             });
         }
         else {

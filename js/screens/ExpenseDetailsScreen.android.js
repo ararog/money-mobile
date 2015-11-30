@@ -96,6 +96,11 @@ module.exports = React.createClass({
         });
     },
 
+    _onDropdownItemSelected: function(data) {
+        if(this.state.categories[data.selected])
+            this.setState({category_id: this.state.categories[data.selected].id})
+    },
+
     render: function() {
 
         var save_button = <TouchableHighlight
@@ -133,18 +138,6 @@ module.exports = React.createClass({
             return list
         }, ['Choose a Category'])
 
-        var categoryDropdown = <Dropdown
-                                    style={{ height: 40, width: 200, fontSize: 12}}
-                                    values={items}
-                                    onChange={(data) => {
-                                        if(this.state.categories[data.selected])
-                                            this.setState({category_id: this.state.categories[data.selected].id})
-                                    }} />
-
-        var doneSwitch = <SwitchAndroid
-                            onValueChange={(value) => this.setState({done: value})}
-                            value={this.state.done} />
-
         return (
             <View style={localStyles.container}>
                 <Text style={styles.label}>Description</Text>
@@ -155,7 +148,9 @@ module.exports = React.createClass({
                     value={this.state.description} />
 
                 <Text style={styles.label}>Category</Text>
-                {categoryDropdown}
+                <Dropdown values={items}
+                    style={{ height: 40, width: 200, fontSize: 12}}
+                    onChange={this._onDropdownItemSelected} />
 
                 <Text style={styles.label}>Amount</Text>
                 <TextInput
@@ -173,7 +168,9 @@ module.exports = React.createClass({
 
                 <Text style={styles.label}>Done</Text>
                 <View style={localStyles.switch}>
-                    {doneSwitch}
+                    <SwitchAndroid
+                        onValueChange={(value) => this.setState({done: value})}
+                        value={this.state.done} />
                 </View>
 
                 <View style={{flexDirection: 'row', height: 30}}>

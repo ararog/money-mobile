@@ -3,7 +3,6 @@
 var React = require('react-native');
 var {
     PickerIOS,
-    PickerItemIOS,
     Platform,
     StyleSheet,
     SwitchIOS,
@@ -12,6 +11,8 @@ var {
     TouchableHighlight,
     View,
 } = React;
+
+var PickerItemIOS = PickerIOS.Item
 
 var Dropdown = require('react-native-dropdown-android')
 
@@ -27,7 +28,7 @@ module.exports = React.createClass({
             amount: '',
             comment: '',
             done: false,
-            category_id: null,
+            category_id: '',
             categories: [],
         }
 
@@ -99,6 +100,32 @@ module.exports = React.createClass({
         });
     },
 
+    _onPickerItemSelected: function(category_id) {
+
+        this.setState({category_id: category_id, showPicker: false})
+    },
+
+    _renderPicker: function() {
+        if(this.state.showPicker) {
+            var items = this.state.categories.map((category) => {
+                  return <PickerItemIOS
+                              key={category.id}
+                              value={category.id}
+                              label={category.name} />
+            })
+
+            return  <PickerIOS
+                        style={localStyles.picker}
+                        selectedValue={this.state.category_id}
+                        onValueChange={this._onPickerItemSelected}>
+                        {items}
+                     </PickerIOS>
+        }
+        else {
+            return
+        }
+    },
+
     render: function() {
 
         var save_button = <TouchableHighlight
@@ -128,35 +155,6 @@ module.exports = React.createClass({
                             </TouchableHighlight>
         }
 
-        if(this.state.showPicker) {
-            var items = this.state.categories.map((category) => {
-                  return <PickerItemIOS
-                              key={category.id}
-                              value={category.id}
-                              label={category.name} />
-            })
-
-            picker = <PickerIOS
-                        selectedValue={this.state.category_id}
-                        onValueChange={(category_id) => {
-                            this.setState({category_id: category_id, showPicker: false})
-                        }}>
-                        {items}
-                     </PickerIOS>
-        }
-
-        var categoryDropdown = <TouchableHighlight
-                                    style={localStyles.right_button}
-                                    onPress={() => this.setState({showPicker: true})}>
-                                    <Text style={localStyles.buttonText}>
-                                        Choose a Category
-                                    </Text>
-                                </TouchableHighlight>
-
-        var doneSwitch = <SwitchIOS
-                            onValueChange={(value) => this.setState({done: value})}
-                            value={this.state.done} />
-
         return (
             <View style={localStyles.container}>
                 <Text style={styles.label}>Description</Text>
@@ -167,7 +165,13 @@ module.exports = React.createClass({
                     value={this.state.description} />
 
                 <Text style={styles.label}>Category</Text>
-                {categoryDropdown}
+                <TouchableHighlight
+                    style={{height: 40, flexDirection:'row', alignItems: 'center'}}
+                    onPress={() => this.setState({showPicker: true})}>
+                    <Text style={{textAlign: 'left', color: 'black'}}>
+                        Choose a Category
+                    </Text>
+                </TouchableHighlight>
 
                 <Text style={styles.label}>Amount</Text>
                 <TextInput
@@ -185,7 +189,9 @@ module.exports = React.createClass({
 
                 <Text style={styles.label}>Done</Text>
                 <View style={localStyles.switch}>
-                    {doneSwitch}
+                    <SwitchIOS
+                        onValueChange={(value) => this.setState({done: value})}
+                        value={this.state.done} />
                 </View>
 
                 <View style={{flexDirection: 'row', height: 30}}>
@@ -193,7 +199,7 @@ module.exports = React.createClass({
                     {delete_button}
                 </View>
 
-                {picker}
+                {this._renderPicker()}
             </View>
         );
     }
@@ -209,6 +215,13 @@ var localStyles = StyleSheet.create({
         flexDirection: 'row',
         height: 40,
         alignItems: 'flex-start',
+    },
+    picker: {
+        position: 'absolute',
+        left: 0,
+        right: 0,
+        bottom: 100,
+        height: 100,
     },
     buttonText: {
         fontSize: 12,
