@@ -12,7 +12,7 @@ var {
     View,
 } = React;
 
-var ExpenseDetailsScreen = require('./ExpenseDetailsScreen')
+var ExpenseDetails = require('./ExpenseDetails')
 
 var styles = require('../styles')
 
@@ -97,7 +97,7 @@ module.exports = React.createClass({
         if (Platform.OS === 'ios') {
             this.props.navigator.push({
                 title: 'Expense Details',
-                component: ExpenseDetailsScreen,
+                component: ExpenseDetails,
                 passProps: {expense: expense, container: this.props.container},
             });
         }

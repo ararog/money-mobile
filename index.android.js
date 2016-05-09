@@ -18,12 +18,12 @@ var {
 var Drawer = require('react-native-drawer')
 var store = require('react-native-simple-store')
 
-var StartupScreen = require('./js/screens/StartupScreen')
-var LoginScreen = require('./js/screens/LoginScreen')
-var OverviewScreen = require('./js/screens/OverviewScreen')
-var ExpensesScreen = require('./js/screens/ExpensesScreen')
-var ExpenseDetailsScreen = require('./js/screens/ExpenseDetailsScreen')
-var MenuScreen = require('./js/screens/MenuScreen')
+var Startup = require('./js/screens/Startup')
+var Login = require('./js/screens/Login')
+var Overview = require('./js/screens/Overview')
+var Expenses = require('./js/screens/Expenses')
+var ExpenseDetails = require('./js/screens/ExpenseDetails')
+var Menu = require('./js/screens/Menu')
 
 var { container } = require('./js/container')
 var styles = require('./js/styles')
@@ -49,7 +49,7 @@ var RouteMapper = function(route, navigationOperations, onComponentRef) {
                     style={styles.toolbar}
                     titleColor="white"
                     title="Overview" />
-                <OverviewScreen
+                <Overview
                     style={{flex: 1}}
                     container={container}
                     navigator={navigationOperations} />
@@ -66,7 +66,7 @@ var RouteMapper = function(route, navigationOperations, onComponentRef) {
                     style={styles.toolbar}
                     titleColor='white'
                     title='Expenses' />
-                <ExpensesScreen
+                <Expenses
                     style={{flex: 1}}
                     container={container}
                     navigator={navigationOperations} />
@@ -83,7 +83,7 @@ var RouteMapper = function(route, navigationOperations, onComponentRef) {
                     style={styles.toolbar}
                     titleColor='white'
                     title='Expense Details' />
-                <ExpenseDetailsScreen
+                <ExpenseDetails
                     style={{flex: 1}}
                     container={container}
                     expense={route.expense}
@@ -130,10 +130,10 @@ var Money = React.createClass({
     render: function() {
 
         if(! this.state.started)
-            return <StartupScreen />
+            return <Startup />
 
-        var menu = <MenuScreen onItemClick={this.navigate} />
-        var component = <LoginScreen
+        var menu = <Menu onItemClick={this.navigate} />
+        var component = <Login
                             container={container}
                             onLogged={this.onLogged} />
 

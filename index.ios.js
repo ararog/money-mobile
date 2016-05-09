@@ -16,11 +16,11 @@ var {
 var Drawer = require('react-native-drawer')
 var store = require('react-native-simple-store')
 
-var StartupScreen = require('./js/screens/StartupScreen')
-var LoginScreen = require('./js/screens/LoginScreen')
-var OverviewScreen = require('./js/screens/OverviewScreen')
-var ExpensesScreen = require('./js/screens/ExpensesScreen')
-var MenuScreen = require('./js/screens/MenuScreen')
+var Startup = require('./js/s/Startup')
+var Login = require('./js/s/Login')
+var Overview = require('./js/s/Overview')
+var Expenses = require('./js/s/Expenses')
+var Menu = require('./js/s/Menu')
 
 var { container } = require('./js/container')
 var styles = require('./js/styles')
@@ -59,7 +59,7 @@ var Money = React.createClass({
             this.refs.navigator.push({
                 title: 'Overview',
                 passProps: {container: container},
-                component: OverviewScreen,
+                component: Overview,
                 leftButtonIcon:require('./img/menu_button.png'),
                 onLeftButtonPress: this.openMenu
             })
@@ -68,7 +68,7 @@ var Money = React.createClass({
             this.refs.navigator.push({
                 title: 'Expenses',
                 passProps: {container: container},
-                component: ExpensesScreen,
+                component: Expenses,
                 leftButtonIcon:require('./img/menu_button.png'),
                 onLeftButtonPress: this.openMenu
             })
@@ -79,10 +79,10 @@ var Money = React.createClass({
     render: function() {
 
         if(! this.state.started)
-            return <StartupScreen />
+            return <Startup />
 
-        var menu = <MenuScreen onItemClick={this.navigate} />
-        var component = <LoginScreen
+        var menu = <Menu onItemClick={this.navigate} />
+        var component = <Login
                             container={container}
                             onLogged={this.onLogged} />
 
@@ -90,7 +90,7 @@ var Money = React.createClass({
             var initialRoute = {
                 title: 'Overview',
                 passProps: {container: container},
-                component: OverviewScreen,
+                component: Overview,
                 leftButtonIcon:require('./img/menu_button.png'),
                 onLeftButtonPress: this.openMenu
             }
