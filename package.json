@@ -6,13 +6,17 @@
     "start": "react-native start"
   },
   "dependencies": {
+    "install": "^0.7.3",
     "lodash": "^4.12.0",
     "md5": "^2.0.0",
     "moment": "^2.13.0",
+    "npm": "^3.8.9",
     "react": "^0.14.5",
     "react-native": "^0.25.0",
+    "react-native-chart": "^0.1.14",
     "react-native-drawer": "^1.8.0",
     "react-native-dropdown-android": "0.0.5",
+    "react-native-parsed-text": "0.0.12",
     "react-native-simple-store": "^0.1.0",
     "react-redux": "^4.4.5",
     "redux": "^3.5.2",
