@@ -1,34 +1,32 @@
 'use strict';
 
-var React = require('react-native');
-var {
+import React, {
     View,
     ListView,
     Text,
-    StyleSheet,
-    TouchableHighlight,
-} = React;
+    TouchableHighlight
+} from 'react-native'
 
-var styles = require('../styles')
+import styles from '../styles'
 
-module.exports = React.createClass({
+export default class Menu extends Component {
 
-    getInitialState: function() {
-        var ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
-        return {
+    constructor(props) {
+        let ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
+        this.state = {
             dataSource: ds.cloneWithRows(this._genRows()),
-        };
-    },
+        }
+    }
 
-    render: function() {
+    render() {
         return (
             <ListView
                 dataSource={this.state.dataSource}
                 renderRow={this._renderRow} />
         );
-    },
+    }
 
-    _renderRow: function(rowData: string, sectionID: number, rowID: number) {
+    _renderRow(rowData, sectionID, rowID) {
         return (
             <TouchableHighlight onPress={() => this._pressRow(rowID)}>
                 <View>
@@ -41,28 +39,28 @@ module.exports = React.createClass({
                 </View>
             </TouchableHighlight>
         );
-    },
+    }
 
-    _genRows: function(): Array<string> {
-        var dataBlob = [];
+    _genRows() {
+        let dataBlob = [];
         dataBlob.push('Overview');
         dataBlob.push('Expenses');
         dataBlob.push('Settings');
         return dataBlob;
-    },
+    }
 
-    _pressRow: function(rowID: number) {
-        var route;
+    _pressRow(rowID) {
+        let route;
         if(rowID == 0)
             route = "overview"
         if(rowID == 1)
             route = "expenses"
 
         this.props.onItemClick(route)
-    },
-});
+    }
+}
 
-var localStyles = StyleSheet.create({
+const localStyles = {
     row: {
         flexDirection: 'row',
         justifyContent: 'center',
@@ -70,4 +68,4 @@ var localStyles = StyleSheet.create({
         padding: 10,
         backgroundColor: '#F6F6F6',
     }
-});
+}

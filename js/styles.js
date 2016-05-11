@@ -1,6 +1,5 @@
-var { StyleSheet, PixelRatio } = require('react-native')
 
-module.exports = StyleSheet.create({
+export default const styles = {
     splash: {
         flex: 1,
         backgroundColor: 'black',
@@ -48,4 +47,4 @@ module.exports = StyleSheet.create({
     text: {
         flex: 1,
     },
-});
+}

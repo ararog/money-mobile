@@ -1,24 +1,22 @@
 'use strict';
 
-var React = require('react-native');
-var {
+import React, {
     ActivityIndicatorIOS,
     ListView,
     Platform,
     ProgressBarAndroid,
     Text,
     TouchableHighlight,
-    StyleSheet,
-    View,
-} = React;
+    View
+} from 'react-native'
 
-var ExpenseDetails = require('./ExpenseDetails')
+import ExpenseDetails from './ExpenseDetails'
 
-var styles = require('../styles')
+import styles from '../styles'
 
-module.exports = React.createClass({
+export default class Expenses extends Component {
 
-    getInitialState: function() {
+    constructor(props) {
         var ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
         return {
             activePage: 1,
@@ -26,21 +24,21 @@ module.exports = React.createClass({
             isLoading: false,
             dataSource: ds
         }
-    },
+    }
 
-    componentDidMount: function() {
+    componentDidMount() {
         this._paginate(1)
-    },
+    }
 
-    _hasMore: function(): boolean {
-        var currentSize = this.state.activePage * 10;
+    _hasMore() {
+        let currentSize = this.state.activePage * 10;
         return currentSize < this.state.itemCount
-    },
+    }
 
-    _onEndReached: function() {
+    _onEndReached() {
         if(! this.state.isLoading && this._hasMore())
             this._paginate(this.state.activePage + 1)
-    },
+    }
 
     _paginate(page) {
 
@@ -60,14 +58,14 @@ module.exports = React.createClass({
         .catch((error) => {
             console.log(error)
         });
-    },
+    }
 
-    _updateDataSource: function(expenses: Array<any>): ListView.DataSource {
+    _updateDataSource(expenses: Array<any>): ListView.DataSource {
         return this.state.dataSource.cloneWithRows(expenses)
-    },
+    }
 
-    _renderRow: function(expense: Object, sectionID: number, rowID: number) {
-        var description = expense.description
+    _renderRow(expense: Object, sectionID: number, rowID: number) {
+        let description = expense.description
         if(description.length > 50)
             description = description.substring(0, 50)
 
@@ -91,9 +89,9 @@ module.exports = React.createClass({
                 </View>
             </TouchableHighlight>
         );
-    },
+    }
 
-    _onItemClicked: function(expense: Object) {
+    _onItemClicked(expense: Object) {
         if (Platform.OS === 'ios') {
             this.props.navigator.push({
                 title: 'Expense Details',
@@ -107,10 +105,10 @@ module.exports = React.createClass({
                 expense: expense,
             });
         }
-    },
+    }
 
-    render: function() {
-        var newDs = this.state.dataSource
+    render() {
+        let newDs = this.state.dataSource
         return (
             <View style={styles.container}>
                 <ListView
@@ -118,11 +116,11 @@ module.exports = React.createClass({
                     onEndReached={this._onEndReached}
                     renderRow={this._renderRow} />
             </View>
-        );
+        )
     }
-});
+}
 
-var localStyles = StyleSheet.create({
+const localStyles = {
     row: {
         flexDirection: 'column',
         justifyContent: 'center',
@@ -148,4 +146,4 @@ var localStyles = StyleSheet.create({
         fontSize: 14,
         color: 'black'
     }
-});
+}

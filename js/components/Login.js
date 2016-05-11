@@ -1,28 +1,25 @@
 'use strict';
 
-var React = require('react-native');
-var {
+import React, {
     Text,
     TextInput,
-    StyleSheet,
     TouchableHighlight,
-    View,
-} = React;
+    View
+} from 'react-native'
 
-var store = require('react-native-simple-store')
+import styles from '../styles'
 
-var styles = require('../styles')
+export default class Login extends Component {
 
-module.exports = React.createClass({
+    constructor(props) {
 
-    getInitialState: function() {
-        return {
+        this.state = {
             email: '',
             password: ''
         }
-    },
+    }
 
-    _onLoginClicked: function(e) {
+    _onLoginClicked(e) {
 
         this.props.container.get('USERS_SERVICE').login(this.state.email, this.state.password)
         .then((response) => response.json())
@@ -39,9 +36,9 @@ module.exports = React.createClass({
             console.log(error);
         })
         .done()
-    },
+    }
 
-    render: function() {
+    render() {
         return (
             <View style={localStyles.container}>
                 <TextInput
@@ -66,14 +63,14 @@ module.exports = React.createClass({
                     </View>
                 </TouchableHighlight>
             </View>
-        );
+        )
     }
-});
+}
 
-var localStyles = StyleSheet.create({
+const localStyles = {
     container: {
         flex: 1,
         padding: 10,
         justifyContent: 'center'
     }
-});
+}

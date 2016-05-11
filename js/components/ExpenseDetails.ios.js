@@ -1,26 +1,24 @@
 'use strict';
 
-var React = require('react-native');
-var {
+import React, {
     PickerIOS,
     Platform,
-    StyleSheet,
     SwitchIOS,
     Text,
     TextInput,
     TouchableHighlight,
-    View,
-} = React;
+    View
+} from 'react-native'
 
 var PickerItemIOS = PickerIOS.Item
 
-var Dropdown = require('react-native-dropdown-android')
+import Dropdown = from 'react-native-dropdown-android'
 
-var styles = require('../styles')
+import styles from '../styles'
 
-module.exports = React.createClass({
+export default class ExpenseDetails extends Component {
 
-    getInitialState: function() {
+    constructor(props) {
 
         var state = {
             showPicker: false,
@@ -47,7 +45,7 @@ module.exports = React.createClass({
         return state
     },
 
-    componentDidMount: function() {
+    componentDidMount() {
         this.props.container.get('CATEGORIES_SERVICE')
         .loadAll()
         .then((response) => response.json())
@@ -59,11 +57,11 @@ module.exports = React.createClass({
         .catch((error) => {
             console.log(error)
         });
-    },
+    }
 
-    _onSaveClicked: function(e) {
+    _onSaveClicked(e) {
 
-        var data = {
+        let data = {
             category_id: this.state.category_id,
             description: this.state.description,
             amount: this.state.amount,
@@ -71,9 +69,9 @@ module.exports = React.createClass({
             done: this.state.done
         }
 
-        var c = this.props.container
+        let c = this.props.container
 
-        var promisse;
+        let promisse;
         if(this.props.expense)
             promisse = c.get('EXPENSES_SERVICE').update(
                 this.props.expense.id, data)
@@ -86,9 +84,9 @@ module.exports = React.createClass({
         .catch((error) => {
             console.log(error)
         });
-    },
+    }
 
-    _onDeleteClicked: function(e) {
+    _onDeleteClicked(e) {
 
         this.props.container.get('EXPENSES_SERVICE')
         .delete(this.props.expense.id)
@@ -98,16 +96,16 @@ module.exports = React.createClass({
         .catch((error) => {
             console.log(error)
         });
-    },
+    }
 
-    _onPickerItemSelected: function(category_id) {
+    _onPickerItemSelected(category_id) {
 
         this.setState({category_id: category_id, showPicker: false})
-    },
+    }
 
-    _renderPicker: function() {
+    _renderPicker() {
         if(this.state.showPicker) {
-            var items = this.state.categories.map((category) => {
+            let items = this.state.categories.map((category) => {
                   return <PickerItemIOS
                               key={category.id}
                               value={category.id}
@@ -124,11 +122,11 @@ module.exports = React.createClass({
         else {
             return
         }
-    },
+    }
 
-    render: function() {
+    render() {
 
-        var save_button = <TouchableHighlight
+        let save_button = <TouchableHighlight
                             style={styles.button}
                             onPress={this._onSaveClicked}>
                             <Text style={localStyles.buttonText}>
@@ -136,7 +134,7 @@ module.exports = React.createClass({
                             </Text>
                         </TouchableHighlight>
 
-        var delete_button
+        let delete_button
         if(this.props.expense) {
             save_button = <TouchableHighlight
                                 style={localStyles.left_button}
@@ -201,11 +199,11 @@ module.exports = React.createClass({
 
                 {this._renderPicker()}
             </View>
-        );
+        )
     }
-});
+}
 
-var localStyles = StyleSheet.create({
+const localStyles = {
     container: {
         flex: 1,
         padding: 10,
@@ -243,5 +241,5 @@ var localStyles = StyleSheet.create({
         height: 30,
         backgroundColor: 'red',
         alignSelf: 'flex-end',
-    },
-});
+    }
+}

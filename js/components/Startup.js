@@ -1,20 +1,20 @@
 'use strict';
 
-var React = require('react-native');
-var {
+import React, {
     View,
     Text,
-    TouchableHighlight,
-} = React;
+    TouchableHighlight
+} from 'react-native'
 
-var styles = require('../styles')
+import styles from '../styles'
 
-module.exports = React.createClass({
-    render: function() {
+export default class Startup extends Component {
+
+    render() {
         return (
             <View style={styles.splash}>
 
             </View>
-        );
+        )
     }
-});
+}

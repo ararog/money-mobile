@@ -1,25 +1,23 @@
 'use strict';
 
-var React = require('react-native');
-var {
+import React, {
     View,
     Text,
-    StyleSheet,
-    TouchableHighlight,
-} = React;
+    TouchableHighlight
+} from 'react-native'
 
-var styles = require('../styles')
+import styles from '../styles'
 
-module.exports = React.createClass({
+export default class Overview extends Component {
 
-    getInitialState: function() {
-        return {
+    constructor(props) {
+        this.state = {
             pending: [],
             lastMonths: []
         }
-    },
+    }
 
-    componentDidMount: function() {
+    componentDidMount() {
         this.props.container.get('EXPENSES_SERVICE')
         .loadOverview()
         .then((response) => response.json())
@@ -30,10 +28,10 @@ module.exports = React.createClass({
         .catch((error) => {
             console.log(error);
         });
-    },
+    }
 
-    render: function() {
-        var pendingItems
+    render() {
+        let pendingItems
 
         if(this.state.pending) {
             var index = 0
@@ -52,11 +50,11 @@ module.exports = React.createClass({
                     {pendingItems}
                 </View>
             </View>
-        );
+        )
     }
-});
+}
 
-var localStyles = StyleSheet.create({
+const localStyles = {
     pending_stats_container: {
         margin: 100,
         alignSelf: 'center',
@@ -76,4 +74,4 @@ var localStyles = StyleSheet.create({
         fontSize: 14,
         textAlign: 'center'
     }
-});
+}
