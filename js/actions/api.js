@@ -10,19 +10,7 @@ let baseUrl = STAGING_BASE_URL //PROD_BASE_URL
 let accessToken = null
 
 export function assignAccessToken(token) {
-
   accessToken = token
-
-  axios.interceptors.request.use(function (config) {
-      var headers = { 'Content-Type': 'application/json', 'Accept-Version': version}
-      if(token)
-        headers['Authorization'] = 'Bearer ' + token
-      config['headers'] = headers
-      return config
-    },
-    function (error) {
-      return Promise.reject(error);
-    });
 }
 
 export function post(path, data) {
@@ -40,3 +28,15 @@ export function delete(path) {
 export function put(path, data) {
   return axios.put(baseUrl + path, data);
 }
+
+axios.interceptors.request.use(
+  function (config) {
+    var headers = { 'Content-Type': 'application/json', 'Accept-Version': version}
+    if(accessToken)
+      headers['Authorization'] = 'Bearer ' + accessToken
+    config['headers'] = headers
+    return config
+  },
+  function (error) {
+    return Promise.reject(error);
+  });
