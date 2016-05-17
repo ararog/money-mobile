@@ -1,28 +1,28 @@
 import {
-  FETCH_NOTIFICATIONS_DATA,
-  FETCH_NOTIFICATIONS_SUCCESS,
-  FETCH_NOTIFICATIONS_ERROR
+    LOGIN,
+    LOGIN_SUCCESS,
+    LOGIN_ERROR,
 } from '../constants/ActionTypes'
 
 const initialState = {
   fetchingData: false,
-  reloading: false,
   error: undefined,
-  items: []
+  isLogged: false,
+  account: []
 }
 
 export function users(state = initialState, action) {
   let { type, payload } = action
 
   switch (type) {
-    case FETCH_NOTIFICATIONS_DATA: {
-      return {...state, fetchingData: true, page: payload.page, reloading: payload.reloading}
+    case LOGIN: {
+      return {...state, fetchingData: true, isLogged: false}
     }
-    case FETCH_NOTIFICATIONS_SUCCESS: {
-      return {...state, fetchingData: false, items: payload.items}
+    case LOGIN_SUCCESS: {
+      return {...state, fetchingData: false, isLogged: true, account: payload.account}
     }
-    case FETCH_NOTIFICATIONS_ERROR: {
-      return {...state, fetchingData: false, error: payload.error}
+    case LOGIN_ERROR: {
+      return {...state, fetchingData: false, isLogged: false, error: payload.error}
     }
   }
 

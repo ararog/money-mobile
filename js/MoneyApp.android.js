@@ -93,14 +93,7 @@ export default class MoneyApp extends Component {
     }
 
     componentDidMount() {
-        store.get('token').then((token) => {
-            if(token) {
-                container.get('USERS_SERVICE').setToken(token)
-                container.get('EXPENSES_SERVICE').setToken(token)
-                container.get('CATEGORIES_SERVICE').setToken(token)
-            }
-            this.setState({started: true})
-        });
+
     }
 
     onLogged() {

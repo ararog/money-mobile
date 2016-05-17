@@ -3,10 +3,12 @@ import * as axios from 'axios';
 
 export const STAGING_BASE_URL = 'http://localhost:8080/api'
 export const PROD_BASE_URL = 'http://localhost:8080/api'
+export const VERSION = '1.0.0'
 //TODO: add localhost?
 
 //TODO: figure out how to determine staging, prod, dev...
 let baseUrl = STAGING_BASE_URL //PROD_BASE_URL
+let version = VERSION
 let accessToken = null
 
 export function assignAccessToken(token) {

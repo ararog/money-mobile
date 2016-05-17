@@ -42,56 +42,42 @@ export default class ExpenseDetails extends Component {
     }
 
     componentDidMount() {
-        this.props.container.get('CATEGORIES_SERVICE')
-        .loadAll()
-        .then((response) => response.json())
-        .then((responseData) => {
-            this.setState({
-                categories: responseData
-            })
+        this.props.loadAll()
+
+        this.setState({
+            categories: responseData
         })
-        .catch((error) => {
-            console.log(error)
-        });
     }
 
     _onSaveClicked(e) {
 
+        const {
+            category_id,
+            description,
+            amount,
+            comment,
+            done
+        } = this.state
+
         let data = {
-            category_id: this.state.category_id,
-            description: this.state.description,
-            amount: this.state.amount,
-            comment: this.state.comment,
-            done: this.state.done
+            category_id: category_id,
+            description: description,
+            amount: amount,
+            comment: comment,
+            done: done
         }
 
-        let c = this.props.container
-
-        let promisse;
         if(this.props.expense)
-            promisse = c.get('EXPENSES_SERVICE').update(
-                this.props.expense.id, data)
+            this.props.update(this.props.expense.id, data)
         else
-            promisse = c.get('EXPENSES_SERVICE').add(data)
+            this.props.add(data)
 
-        promisse.then((response) => {
-            this.props.navigator.pop()
-        })
-        .catch((error) => {
-            console.log(error)
-        });
+        this.props.navigator.pop()
     }
 
     _onDeleteClicked(e) {
-
-        this.props.container.get('EXPENSES_SERVICE')
-        .delete(this.props.expense.id)
-        .then((response) => {
-            this.props.navigator.pop()
-        })
-        .catch((error) => {
-            console.log(error)
-        });
+        this.props.delete(this.props.expense.id)
+        this.props.navigator.pop()
     }
 
     _onDropdownItemSelected(data) {
@@ -100,6 +86,8 @@ export default class ExpenseDetails extends Component {
     }
 
     render() {
+
+        const { description, amount, comment, done } = this.state
 
         let save_button = <TouchableHighlight
                             style={styles.button}
@@ -143,7 +131,7 @@ export default class ExpenseDetails extends Component {
                     keyboardType='default'
                     style={styles.field}
                     onChangeText={(text) => this.setState({description: text})}
-                    value={this.state.description} />
+                    value={description} />
 
                 <Text style={styles.label}>Category</Text>
                 <Dropdown values={items}
@@ -155,20 +143,20 @@ export default class ExpenseDetails extends Component {
                     keyboardType='numeric'
                     style={styles.field}
                     onChangeText={(text) => this.setState({amount: text})}
-                    value={this.state.amount} />
+                    value={amount} />
 
                 <Text style={styles.label}>Comment</Text>
                 <TextInput
                     keyboardType='default'
                     style={styles.field}
                     onChangeText={(text) => this.setState({comment: text})}
-                    value={this.state.comment} />
+                    value={comment} />
 
                 <Text style={styles.label}>Done</Text>
                 <View style={localStyles.switch}>
                     <SwitchAndroid
                         onValueChange={(value) => this.setState({done: value})}
-                        value={this.state.done} />
+                        value={done} />
                 </View>
 
                 <View style={{flexDirection: 'row', height: 30}}>

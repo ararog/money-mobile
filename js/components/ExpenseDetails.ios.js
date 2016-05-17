@@ -46,17 +46,11 @@ export default class ExpenseDetails extends Component {
     },
 
     componentDidMount() {
-        this.props.container.get('CATEGORIES_SERVICE')
-        .loadAll()
-        .then((response) => response.json())
-        .then((responseData) => {
-            this.setState({
-                categories: responseData
-            })
+        this.props.loadAll()
+
+        this.setState({
+            categories: responseData
         })
-        .catch((error) => {
-            console.log(error)
-        });
     }
 
     _onSaveClicked(e) {

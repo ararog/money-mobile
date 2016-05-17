@@ -44,20 +44,14 @@ export default class Expenses extends Component {
 
         this.setState({isLoading: true})
 
-        this.props.container.get('EXPENSES_SERVICE')
-        .loadExpenses(page)
-        .then((response) => response.json())
-        .then((responseData) => {
-            this.setState({
-                activePage: page,
-                itemCount: responseData.total,
-                isLoading: false,
-                dataSource: this._updateDataSource(responseData.items)
-            })
+        this.props.loadExpenses(page)
+
+        this.setState({
+            activePage: page,
+            itemCount: responseData.total,
+            isLoading: false,
+            dataSource: this._updateDataSource(responseData.items)
         })
-        .catch((error) => {
-            console.log(error)
-        });
     }
 
     _updateDataSource(expenses: Array<any>): ListView.DataSource {

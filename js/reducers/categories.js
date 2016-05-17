@@ -1,7 +1,7 @@
 import {
-  FETCH_NOTIFICATIONS_DATA,
-  FETCH_NOTIFICATIONS_SUCCESS,
-  FETCH_NOTIFICATIONS_ERROR
+    LOAD_CATEGORIES,
+    LOAD_CATEGORIES_SUCCESS,
+    LOAD_CATEGORIES_ERROR,
 } from '../constants/ActionTypes'
 
 const initialState = {
@@ -15,13 +15,13 @@ export function categories(state = initialState, action) {
   let { type, payload } = action
 
   switch (type) {
-    case FETCH_NOTIFICATIONS_DATA: {
-      return {...state, fetchingData: true, page: payload.page, reloading: payload.reloading}
+    case LOAD_CATEGORIES: {
+      return {...state, fetchingData: true, reloading: payload.reloading}
     }
-    case FETCH_NOTIFICATIONS_SUCCESS: {
+    case LOAD_CATEGORIES_SUCCESS: {
       return {...state, fetchingData: false, items: payload.items}
     }
-    case FETCH_NOTIFICATIONS_ERROR: {
+    case LOAD_CATEGORIES_ERROR: {
       return {...state, fetchingData: false, error: payload.error}
     }
   }

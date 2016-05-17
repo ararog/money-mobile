@@ -12,7 +12,7 @@ import styles from '../styles'
 export default class Login extends Component {
 
     constructor(props) {
-
+        super(props)
         this.state = {
             email: '',
             password: ''
@@ -20,25 +20,12 @@ export default class Login extends Component {
     }
 
     _onLoginClicked(e) {
-
-        this.props.container.get('USERS_SERVICE').login(this.state.email, this.state.password)
-        .then((response) => response.json())
-        .then((responseData) => {
-            store.save('token', responseData.auth_token)
-            .then(() => {
-                this.props.container.get('USERS_SERVICE').setToken(responseData.auth_token)
-                this.props.container.get('EXPENSES_SERVICE').setToken(responseData.auth_token)
-                this.props.container.get('CATEGORIES_SERVICE').setToken(responseData.auth_token)
-                this.props.onLogged()
-            });
-        })
-        .catch((error) => {
-            console.log(error);
-        })
-        .done()
+        const { email, password } = this.state
+        this.props.login(email, password)
     }
 
     render() {
+        const { email, password } = this.state
         return (
             <View style={localStyles.container}>
                 <TextInput
@@ -46,13 +33,13 @@ export default class Login extends Component {
                     keyboardType='email-address'
                     style={styles.field}
                     onChangeText={(text) => this.setState({email: text})}
-                    value={this.state.email} />
+                    value={email} />
                 <TextInput
                     placeholder='Password'
                     secureTextEntry={true}
                     style={styles.field}
                     onChangeText={(text) => this.setState({password: text})}
-                    value={this.state.password} />
+                    value={password} />
 
                 <TouchableHighlight
                     onPress={this._onLoginClicked}>

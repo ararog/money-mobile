@@ -18,16 +18,10 @@ export default class Overview extends Component {
     }
 
     componentDidMount() {
-        this.props.container.get('EXPENSES_SERVICE')
-        .loadOverview()
-        .then((response) => response.json())
-        .then((responseData) => {
-            this.setState(
-                { pending: responseData.pending, lastMonths: responseData.lastMonths })
-            })
-        .catch((error) => {
-            console.log(error);
-        });
+        this.props.loadOverview()
+        this.setState(
+            { pending: responseData.pending, lastMonths: responseData.lastMonths })
+        })
     }
 
     render() {
