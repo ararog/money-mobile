@@ -11,9 +11,46 @@ import React, {
 
 import Dropdown from 'react-native-dropdown-android'
 
+import * as expensesActions from '../actions/expenses'
+import * as categoriesActions from '../actions/categories'
+
 import styles from '../styles'
 
-export default class ExpenseDetails extends Component {
+const localStyles = {
+    container: {
+        flex: 1,
+        padding: 10,
+        backgroundColor: '#F5FCFF',
+    },
+    switch: {
+        flexDirection: 'row',
+        height: 40,
+        alignItems: 'flex-start',
+    },
+    buttonText: {
+        fontSize: 12,
+        textAlign: 'center',
+        color: 'white',
+    },
+    left_button: {
+        flex: 1,
+        justifyContent: 'center',
+        marginRight: 5,
+        height: 30,
+        backgroundColor: 'blue',
+        alignSelf: 'flex-start',
+    },
+    right_button: {
+        flex: 1,
+        justifyContent: 'center',
+        marginLeft: 5,
+        height: 30,
+        backgroundColor: 'red',
+        alignSelf: 'flex-end',
+    }
+}
+
+class ExpenseDetails extends Component {
 
     constructor(props) {
 
@@ -168,36 +205,14 @@ export default class ExpenseDetails extends Component {
     }
 }
 
-const localStyles = {
-    container: {
-        flex: 1,
-        padding: 10,
-        backgroundColor: '#F5FCFF',
-    },
-    switch: {
-        flexDirection: 'row',
-        height: 40,
-        alignItems: 'flex-start',
-    },
-    buttonText: {
-        fontSize: 12,
-        textAlign: 'center',
-        color: 'white',
-    },
-    left_button: {
-        flex: 1,
-        justifyContent: 'center',
-        marginRight: 5,
-        height: 30,
-        backgroundColor: 'blue',
-        alignSelf: 'flex-start',
-    },
-    right_button: {
-        flex: 1,
-        justifyContent: 'center',
-        marginLeft: 5,
-        height: 30,
-        backgroundColor: 'red',
-        alignSelf: 'flex-end',
-    }
+function stateToProps(state) {
+  let { expenses, categories } = state
+  return { expenses, categories }
 }
+
+function dispatchToProps(dispatch) {
+  let actions = _.extend({}, expensesActions, categoriesActions)
+  return bindActionCreators(actions, dispatch)
+}
+
+export default connect(stateToProps, dispatchToProps)(ExpenseDetails)

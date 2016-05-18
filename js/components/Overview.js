@@ -6,9 +6,33 @@ import React, {
     TouchableHighlight
 } from 'react-native'
 
+import * as expensesActions from '../actions/expenses'
+
 import styles from '../styles'
 
-export default class Overview extends Component {
+const localStyles = {
+    pending_stats_container: {
+        margin: 100,
+        alignSelf: 'center',
+        flexDirection: 'row',
+        width: 440,
+    },
+    pending_stats_box: {
+        width: 100,
+        margin: 5
+    },
+    pending_stats_amount: {
+        fontSize: 26,
+        fontWeight: 'bold',
+        textAlign: 'center'
+    },
+    pending_stats_category: {
+        fontSize: 14,
+        textAlign: 'center'
+    }
+}
+
+class Overview extends Component {
 
     constructor(props) {
         this.state = {
@@ -48,24 +72,14 @@ export default class Overview extends Component {
     }
 }
 
-const localStyles = {
-    pending_stats_container: {
-        margin: 100,
-        alignSelf: 'center',
-        flexDirection: 'row',
-        width: 440,
-    },
-    pending_stats_box: {
-        width: 100,
-        margin: 5
-    },
-    pending_stats_amount: {
-        fontSize: 26,
-        fontWeight: 'bold',
-        textAlign: 'center'
-    },
-    pending_stats_category: {
-        fontSize: 14,
-        textAlign: 'center'
-    }
+function stateToProps(state) {
+  let { expenses } = state
+  return { expenses }
 }
+
+function dispatchToProps(dispatch) {
+  let actions = _.extend({}, expensesActions)
+  return bindActionCreators(actions, dispatch)
+}
+
+export default connect(stateToProps, dispatchToProps)(Overview)

@@ -12,9 +12,39 @@ import React, {
 
 import ExpenseDetails from './ExpenseDetails'
 
+import * as expensesActions from '../actions/expenses'
+
 import styles from '../styles'
 
-export default class Expenses extends Component {
+const localStyles = {
+    row: {
+        flexDirection: 'column',
+        justifyContent: 'center',
+        height: 60,
+        padding: 10,
+        backgroundColor: '#F6F6F6',
+    },
+    category_label: {
+        flex: 1,
+        fontSize: 12,
+        color: 'gray',
+        justifyContent: 'flex-start',
+    },
+    amount_label: {
+        flex: 1,
+        fontSize: 12,
+        color: 'green',
+        textAlign: 'right',
+        justifyContent: 'flex-end',
+    },
+    description_label: {
+        flex: 1,
+        fontSize: 14,
+        color: 'black'
+    }
+}
+
+class Expenses extends Component {
 
     constructor(props) {
         var ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
@@ -114,30 +144,14 @@ export default class Expenses extends Component {
     }
 }
 
-const localStyles = {
-    row: {
-        flexDirection: 'column',
-        justifyContent: 'center',
-        height: 60,
-        padding: 10,
-        backgroundColor: '#F6F6F6',
-    },
-    category_label: {
-        flex: 1,
-        fontSize: 12,
-        color: 'gray',
-        justifyContent: 'flex-start',
-    },
-    amount_label: {
-        flex: 1,
-        fontSize: 12,
-        color: 'green',
-        textAlign: 'right',
-        justifyContent: 'flex-end',
-    },
-    description_label: {
-        flex: 1,
-        fontSize: 14,
-        color: 'black'
-    }
+function stateToProps(state) {
+  let { expenses } = state
+  return { expenses }
 }
+
+function dispatchToProps(dispatch) {
+  let actions = _.extend({}, expensesActions)
+  return bindActionCreators(actions, dispatch)
+}
+
+export default connect(stateToProps, dispatchToProps)(Expenses)

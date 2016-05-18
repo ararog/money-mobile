@@ -12,11 +12,53 @@ import React, {
 
 var PickerItemIOS = PickerIOS.Item
 
-import Dropdown = from 'react-native-dropdown-android'
+import * as expensesActions from '../actions/expenses'
+import * as categoriesActions from '../actions/categories'
 
 import styles from '../styles'
 
-export default class ExpenseDetails extends Component {
+const localStyles = {
+    container: {
+        flex: 1,
+        padding: 10,
+        backgroundColor: '#F5FCFF',
+    },
+    switch: {
+        flexDirection: 'row',
+        height: 40,
+        alignItems: 'flex-start',
+    },
+    picker: {
+        position: 'absolute',
+        left: 0,
+        right: 0,
+        bottom: 100,
+        height: 100,
+    },
+    buttonText: {
+        fontSize: 12,
+        textAlign: 'center',
+        color: 'white',
+    },
+    left_button: {
+        flex: 1,
+        justifyContent: 'center',
+        marginRight: 5,
+        height: 30,
+        backgroundColor: 'blue',
+        alignSelf: 'flex-start',
+    },
+    right_button: {
+        flex: 1,
+        justifyContent: 'center',
+        marginLeft: 5,
+        height: 30,
+        backgroundColor: 'red',
+        alignSelf: 'flex-end',
+    }
+}
+
+class ExpenseDetails extends Component {
 
     constructor(props) {
 
@@ -63,33 +105,19 @@ export default class ExpenseDetails extends Component {
             done: this.state.done
         }
 
-        let c = this.props.container
-
-        let promisse;
         if(this.props.expense)
-            promisse = c.get('EXPENSES_SERVICE').update(
-                this.props.expense.id, data)
+            this.props.update(this.props.expense.id, data)
         else
-            promisse = c.get('EXPENSES_SERVICE').add(data)
+            this.props.add(data)
 
-        promisse.then((response) => {
-            this.props.navigator.pop()
-        })
-        .catch((error) => {
-            console.log(error)
-        });
+        this.props.navigator.pop()
     }
 
     _onDeleteClicked(e) {
 
-        this.props.container.get('EXPENSES_SERVICE')
-        .delete(this.props.expense.id)
-        .then((response) => {
-            this.props.navigator.pop()
-        })
-        .catch((error) => {
-            console.log(error)
-        });
+        this.props.delete(this.props.expense.id)
+
+        this.props.navigator.pop()
     }
 
     _onPickerItemSelected(category_id) {
@@ -197,43 +225,14 @@ export default class ExpenseDetails extends Component {
     }
 }
 
-const localStyles = {
-    container: {
-        flex: 1,
-        padding: 10,
-        backgroundColor: '#F5FCFF',
-    },
-    switch: {
-        flexDirection: 'row',
-        height: 40,
-        alignItems: 'flex-start',
-    },
-    picker: {
-        position: 'absolute',
-        left: 0,
-        right: 0,
-        bottom: 100,
-        height: 100,
-    },
-    buttonText: {
-        fontSize: 12,
-        textAlign: 'center',
-        color: 'white',
-    },
-    left_button: {
-        flex: 1,
-        justifyContent: 'center',
-        marginRight: 5,
-        height: 30,
-        backgroundColor: 'blue',
-        alignSelf: 'flex-start',
-    },
-    right_button: {
-        flex: 1,
-        justifyContent: 'center',
-        marginLeft: 5,
-        height: 30,
-        backgroundColor: 'red',
-        alignSelf: 'flex-end',
-    }
+function stateToProps(state) {
+  let { expenses, categories } = state
+  return { expenses, categories }
 }
+
+function dispatchToProps(dispatch) {
+  let actions = _.extend({}, expensesActions, categoriesActions)
+  return bindActionCreators(actions, dispatch)
+}
+
+export default connect(stateToProps, dispatchToProps)(ExpenseDetails)

@@ -7,9 +7,19 @@ import React, {
     View
 } from 'react-native'
 
+import * as usersActions from '../actions/users'
+
 import styles from '../styles'
 
-export default class Login extends Component {
+const localStyles = {
+    container: {
+        flex: 1,
+        padding: 10,
+        justifyContent: 'center'
+    }
+}
+
+class Login extends Component {
 
     constructor(props) {
         super(props)
@@ -54,10 +64,14 @@ export default class Login extends Component {
     }
 }
 
-const localStyles = {
-    container: {
-        flex: 1,
-        padding: 10,
-        justifyContent: 'center'
-    }
+function stateToProps(state) {
+  let { users } = state
+  return { users }
 }
+
+function dispatchToProps(dispatch) {
+  let actions = _.extend({}, usersActions)
+  return bindActionCreators(actions, dispatch)
+}
+
+export default connect(stateToProps, dispatchToProps)(Login)
