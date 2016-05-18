@@ -18,10 +18,10 @@ import Menu from './js/s/Menu'
 
 import styles from './js/styles'
 
-export default class MoneyApp extends Component {
+class MoneyApp extends Component {
 
     constructor(props) {
-        this.state = { logged: false, started: false}
+
     }
 
     componentDidMount() {
@@ -29,7 +29,7 @@ export default class MoneyApp extends Component {
     }
 
     onLogged() {
-        this.setState({ logged: true })
+
     }
 
     closeMenu(){
@@ -41,41 +41,38 @@ export default class MoneyApp extends Component {
     }
 
     navigate(route) {
+        const { navigator, drawer } = this.refs
         if(route == 'overview')
-            this.refs.navigator.push({
+            navigator.push({
                 title: 'Overview',
-                passProps: {container: container},
                 component: Overview,
                 leftButtonIcon:require('./img/menu_button.png'),
                 onLeftButtonPress: this.openMenu
             })
 
         if(route == 'expenses')
-            this.refs.navigator.push({
+            navigator.push({
                 title: 'Expenses',
-                passProps: {container: container},
                 component: Expenses,
                 leftButtonIcon:require('./img/menu_button.png'),
                 onLeftButtonPress: this.openMenu
             })
 
-        this.refs.drawer.close()
+        drawer.close()
     },
 
     render() {
+        const { user, autoRehydrated } = this.props
 
-        if(! this.state.started)
+        if(! autoRehydrated)
             return <Startup />
 
         let menu = <Menu onItemClick={this.navigate} />
-        let component = <Login
-                            container={container}
-                            onLogged={this.onLogged} />
+        let component = <Login onLogged={this.onLogged} />
 
-        if(container.get('USERS_SERVICE').isLogged()) {
+        if(user.isLogged) {
             let initialRoute = {
                 title: 'Overview',
-                passProps: {container: container},
                 component: Overview,
                 leftButtonIcon:require('./img/menu_button.png'),
                 onLeftButtonPress: this.openMenu
@@ -94,3 +91,10 @@ export default class MoneyApp extends Component {
         return component
     }
 }
+
+function stateToProps(state) {
+  let { users, autoRehydrated } = state
+  return { users, autoRehydrated }
+}
+
+export default connect(stateToProps, null)(MoneyApp)

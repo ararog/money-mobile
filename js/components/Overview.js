@@ -35,25 +35,21 @@ const localStyles = {
 class Overview extends Component {
 
     constructor(props) {
-        this.state = {
-            pending: [],
-            lastMonths: []
-        }
+        super(props)
     }
 
     componentDidMount() {
         this.props.loadOverview()
-        this.setState(
-            { pending: responseData.pending, lastMonths: responseData.lastMonths })
-        })
     }
 
     render() {
+        const { expenses } = this.props
+
         let pendingItems
 
-        if(this.state.pending) {
+        if(expenses.overview.pending) {
             var index = 0
-            pendingItems = this.state.pending.map(pending => {
+            pendingItems = expenses.overview.pending.map(pending => {
                 index++
                 return (<View style={localStyles.pending_stats_box} key={index}>
                             <Text style={localStyles.pending_stats_amount}>{pending.total.toFixed(2)}</Text>

@@ -44,7 +44,6 @@ const RouteMapper = function(route, navigationOperations, onComponentRef) {
                     title="Overview" />
                 <Overview
                     style={{flex: 1}}
-                    container={container}
                     navigator={navigationOperations} />
             </View>
         );
@@ -61,7 +60,6 @@ const RouteMapper = function(route, navigationOperations, onComponentRef) {
                     title='Expenses' />
                 <Expenses
                     style={{flex: 1}}
-                    container={container}
                     navigator={navigationOperations} />
             </View>
         );
@@ -78,7 +76,6 @@ const RouteMapper = function(route, navigationOperations, onComponentRef) {
                     title='Expense Details' />
                 <ExpenseDetails
                     style={{flex: 1}}
-                    container={container}
                     expense={route.expense}
                     navigator={navigationOperations} />
             </View>
@@ -86,10 +83,10 @@ const RouteMapper = function(route, navigationOperations, onComponentRef) {
     }
 };
 
-export default class MoneyApp extends Component {
+class MoneyApp extends Component {
 
     constructor(props) {
-        thsis = { logged: false, started: false}
+
     }
 
     componentDidMount() {
@@ -97,7 +94,7 @@ export default class MoneyApp extends Component {
     }
 
     onLogged() {
-        this.setState({ logged: true })
+
     }
 
     closeMenu(){
@@ -114,16 +111,15 @@ export default class MoneyApp extends Component {
     }
 
     render() {
+        const { user, autoRehydrated } = this.props
 
-        if(! this.state.started)
+        if(! autoRehydrated)
             return <Startup />
 
         let menu = <Menu onItemClick={this.navigate} />
-        let component = <Login
-                            container={container}
-                            onLogged={this.onLogged} />
+        let component = <Login onLogged={this.onLogged} />
 
-        if(container.get('USERS_SERVICE').isLogged()) {
+        if(user.isLogged) {
             let initialRoute = {name: 'overview', openMenu: this.openMenu}
             component = <Drawer ref='drawer'
                             openDrawerOffset='.25'
@@ -139,3 +135,9 @@ export default class MoneyApp extends Component {
         return component
     }
 }
+
+function stateToProps(state) {
+  let { users, autoRehydrated } = state
+  return { users, autoRehydrated }
+}
+export default connect(stateToProps, null)(MoneyApp)

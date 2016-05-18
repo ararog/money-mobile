@@ -88,34 +88,38 @@ class ExpenseDetails extends Component {
     },
 
     componentDidMount() {
-        this.props.loadAll()
-
-        this.setState({
-            categories: responseData
-        })
+        this.props.loadCategories()
     }
 
     _onSaveClicked(e) {
+        const { expense } = this.props
+        const {
+            category_id,
+            description,
+            comment,
+            amount,
+            done
+        } = this.state
 
         let data = {
-            category_id: this.state.category_id,
-            description: this.state.description,
-            amount: this.state.amount,
-            comment: this.state.comment,
-            done: this.state.done
+            category_id: category_id,
+            description: description,
+            amount: amount,
+            comment: comment,
+            done: done
         }
 
-        if(this.props.expense)
-            this.props.update(this.props.expense.id, data)
+        if(expense)
+            this.props.updateExpense(expense.id, data)
         else
-            this.props.add(data)
+            this.props.addExpense(data)
 
         this.props.navigator.pop()
     }
 
     _onDeleteClicked(e) {
 
-        this.props.delete(this.props.expense.id)
+        this.props.deleteExpense(this.props.expense.id)
 
         this.props.navigator.pop()
     }
@@ -126,8 +130,11 @@ class ExpenseDetails extends Component {
     }
 
     _renderPicker() {
-        if(this.state.showPicker) {
-            let items = this.state.categories.map((category) => {
+        const { showPicker, category_id } = this.state
+        const { categories } = this.props
+
+        if(showPicker) {
+            let items = categories.items.map((category) => {
                   return <PickerItemIOS
                               key={category.id}
                               value={category.id}
@@ -136,7 +143,7 @@ class ExpenseDetails extends Component {
 
             return  <PickerIOS
                         style={localStyles.picker}
-                        selectedValue={this.state.category_id}
+                        selectedValue={category_id}
                         onValueChange={this._onPickerItemSelected}>
                         {items}
                      </PickerIOS>
@@ -147,6 +154,8 @@ class ExpenseDetails extends Component {
     }
 
     render() {
+        const { description, amount, comment, done } = this.state
+        const { expense } = this.props
 
         let save_button = <TouchableHighlight
                             style={styles.button}
@@ -157,7 +166,7 @@ class ExpenseDetails extends Component {
                         </TouchableHighlight>
 
         let delete_button
-        if(this.props.expense) {
+        if(expense) {
             save_button = <TouchableHighlight
                                 style={localStyles.left_button}
                                 onPress={this._onDeleteClicked}>
@@ -182,7 +191,7 @@ class ExpenseDetails extends Component {
                     keyboardType='default'
                     style={styles.field}
                     onChangeText={(text) => this.setState({description: text})}
-                    value={this.state.description} />
+                    value={description} />
 
                 <Text style={styles.label}>Category</Text>
                 <TouchableHighlight
@@ -198,20 +207,20 @@ class ExpenseDetails extends Component {
                     keyboardType='numeric'
                     style={styles.field}
                     onChangeText={(text) => this.setState({amount: text})}
-                    value={this.state.amount} />
+                    value={amount} />
 
                 <Text style={styles.label}>Comment</Text>
                 <TextInput
                     keyboardType='default'
                     style={styles.field}
                     onChangeText={(text) => this.setState({comment: text})}
-                    value={this.state.comment} />
+                    value={comment} />
 
                 <Text style={styles.label}>Done</Text>
                 <View style={localStyles.switch}>
                     <SwitchIOS
                         onValueChange={(value) => this.setState({done: value})}
-                        value={this.state.done} />
+                        value={done} />
                 </View>
 
                 <View style={{flexDirection: 'row', height: 30}}>

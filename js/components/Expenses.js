@@ -49,11 +49,14 @@ class Expenses extends Component {
     constructor(props) {
         var ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
         return {
-            activePage: 1,
-            itemCount: 0,
-            isLoading: false,
             dataSource: ds
         }
+    }
+
+    componentWillReceiveProps(nextProps) {
+        this.setState({
+            dataSource: this._updateDataSource(nextProps.expenses.items)
+        })
     }
 
     componentDidMount() {
@@ -61,34 +64,27 @@ class Expenses extends Component {
     }
 
     _hasMore() {
-        let currentSize = this.state.activePage * 10;
-        return currentSize < this.state.itemCount
+        const { expenses } = this.props
+        const { page, total } = expenses
+        let currentSize = page * 10;
+        return currentSize < total
     }
 
     _onEndReached() {
-        if(! this.state.isLoading && this._hasMore())
-            this._paginate(this.state.activePage + 1)
+        const { expenses } = this.props
+        if(! expenses.fetchingData && this._hasMore())
+            this._paginate(expenses.page + 1)
     }
 
     _paginate(page) {
-
-        this.setState({isLoading: true})
-
         this.props.loadExpenses(page)
-
-        this.setState({
-            activePage: page,
-            itemCount: responseData.total,
-            isLoading: false,
-            dataSource: this._updateDataSource(responseData.items)
-        })
     }
 
-    _updateDataSource(expenses: Array<any>): ListView.DataSource {
+    _updateDataSource(expenses) {
         return this.state.dataSource.cloneWithRows(expenses)
     }
 
-    _renderRow(expense: Object, sectionID: number, rowID: number) {
+    _renderRow(expense, sectionID, rowID) {
         let description = expense.description
         if(description.length > 50)
             description = description.substring(0, 50)
@@ -116,15 +112,16 @@ class Expenses extends Component {
     }
 
     _onItemClicked(expense: Object) {
+        const { navigator } = this.props
         if (Platform.OS === 'ios') {
-            this.props.navigator.push({
+            navigator.push({
                 title: 'Expense Details',
                 component: ExpenseDetails,
-                passProps: {expense: expense, container: this.props.container},
+                passProps: {expense: expense},
             });
         }
         else {
-            this.props.navigator.push({
+            navigator.push({
                 name: 'expense_details',
                 expense: expense,
             });

@@ -123,8 +123,8 @@ class ExpenseDetails extends Component {
     }
 
     render() {
-
         const { description, amount, comment, done } = this.state
+        const { categories, expense } = this.props
 
         let save_button = <TouchableHighlight
                             style={styles.button}
@@ -135,7 +135,7 @@ class ExpenseDetails extends Component {
                         </TouchableHighlight>
 
         let delete_button
-        if(this.props.expense) {
+        if(expense) {
             save_button = <TouchableHighlight
                                 style={localStyles.left_button}
                                 onPress={this._onDeleteClicked}>
@@ -153,7 +153,7 @@ class ExpenseDetails extends Component {
                             </TouchableHighlight>
         }
 
-        let items = this.state.categories.map((category) => {
+        let items = categories.items.map((category) => {
             return category.name
         })
         .reduce((list, item) => {
