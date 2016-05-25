@@ -1,6 +1,6 @@
 'use strict'
 
-import React, { NativeModules } from 'react-native'
+import React, { AsyncStorage } from 'react-native'
 import { applyMiddleware, createStore, compose } from 'redux'
 import { persistStore, autoRehydrate } from 'redux-persist'
 import { Provider } from 'react-redux'
@@ -14,6 +14,9 @@ const store = createStore(rootReducer, {}, compose(
   autoRehydrate(),
   applyMiddleware(thunk, logger)
 ))
+persistStore(store, {
+  storage: AsyncStorage
+}).purge(['feed'])
 
 const wrapper = () => {
     return (
