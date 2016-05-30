@@ -1,6 +1,5 @@
-'use strict'
-
-import React, { AsyncStorage } from 'react-native'
+import React, { Component } from 'react'
+import { AsyncStorage } from 'react-native'
 import { applyMiddleware, createStore, compose } from 'redux'
 import { persistStore, autoRehydrate } from 'redux-persist'
 import { Provider } from 'react-redux'
