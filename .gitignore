@@ -25,3 +25,8 @@ build/Release
 # Dependency directory
 # https://www.npmjs.org/doc/misc/npm-faq.html#should-i-check-my-node_modules-folder-into-git
 node_modules
+android/app/build
+ios/Money.xcodeproj/project.xcworkspace
+android/.gradle
+android/build
+ios/Money.xcodeproj/xcuserdata
